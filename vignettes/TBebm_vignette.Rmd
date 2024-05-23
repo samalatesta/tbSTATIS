@@ -1,5 +1,5 @@
 ---
-title: "Tbebm_vignette"
+title: "TBebm vignette"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Tbebm_vignette}

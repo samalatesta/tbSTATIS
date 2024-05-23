@@ -2,9 +2,3 @@
 
 TBebmData <- data.frame(ID=c(1:100))
 
-
-
-
-
-
-usethis::use_data(TBebmData, overwrite = TRUE)
