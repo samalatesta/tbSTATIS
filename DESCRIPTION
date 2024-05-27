@@ -2,8 +2,8 @@ Package: TBebm
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: person("Samantha", "Malatesta", email = "samalate@bu.edu", role = c("aut", "cre", "cph"))
+Maintainer: Samantha Malatesta <samalate@bu.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
@@ -15,3 +15,7 @@ Suggests:
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
+Imports: 
+    dplyr,
+    ggplot2
+RoxygenNote: 7.3.1
