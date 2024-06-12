@@ -1,11 +1,18 @@
 ---
 title: "Tutorial for R Package TBebm"
-output: 
+output:
   html_document:
     toc: true
     toc_float:
       collapsed: false
     toc_depth: 4
+  word_document:
+    toc: true
+    toc_depth: '4'
+vignette: >
+  %\VignetteIndexEntry{Tbebm_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -85,7 +92,6 @@ X5 | 4 |
 X6 | 1 | <br> 
 
 
-
 **Important Note**      
   In theory we can include as many clinical measures and events as possible when fitting the EBM. The performance of the method decreases with smaller sample sizes, a larger number of events, and lower values of p for each event. We should consider these factors when choosing data to estimate the EBM. An additional challenge includes non-convergence when estimating the maximum likelihood sequence. This can potentially be mitigated by increasing the number of iterations during estimation but comes at the cost of increased computation time. 
 
@@ -110,7 +116,13 @@ fivenum(TBebmData$C2)
 ```
 ## Example analysis
 
-### Visualize clinical measures
+### Visualize clinical events
+Prior to fitting the model, it is good practice to first visualize the data we are using. We can plot our data using the plot_events function. This function first calculates the frequency of each event occurring and orders the events from most frequent to least frequent. The ordered events are the expected disease sequence for the data set as a greater event frequency should correspond to earlier disease stages. We then sort observations by the ordered events. We then plot each observation to visualize how well the data follow the expected disease sequence. The x-axis corresponds to observations after sorting and the y-axis corresponds to clinical events ordered by frequency. Blue indicates the event has occurred and white indicates the event has not occurred. If our data aligns well with the expected disease sequence, we expect the top left area of the plot to be mostly white and the bottom right to be consistently blue.  
+  
+We present the plot from  running the plot_events function with TBebmData. The y axis is ordered as X1, X6, X3, X2, X4, X5. This aligns with our ground truth sequence where X1, X6, and X3 occur at stage 1 followed by X2, X4, and X5 at stages 2, 3, and 4, respectively. We see our data align well with the ground truth sequence overall with little to know events occurring in the upper left hand portion of the plot. This is result of us using a value of .9 for all clinical events when we simulated our data set. If p was lower, we would expect to see more variation. 
+```{r plot events}
+plot_events(TBebmData, id.var="Index", event.vars=c("X1", "X2", "X3", "X4", "X5", "X6"))
+```
 
 ### Estimate model
 
@@ -124,9 +136,23 @@ fivenum(TBebmData$C2)
 
 
 
-## Conclusion
-We conclude with some considerations and best practices for practitioners wanting to analyze data with TBebm. Fitting the EBM requires collecting data that is strongly correlated with disease severity. For TB disease, we include measures that are well-established as predictors of treatment outcome and TCC and that are often used individually to stratify patients into categories that represent advanced versus early disease. Fitting the EBM also requires the user to input a value for p for each event included in the model. With TB diagnostic measures and chest x-ray data, we expect p to be close to 1. The user should always run a sensitivity analysis where they decrease p from their original model fit to assess the sensitivity of the maximum likelihood sequence to p. The user should also always check the likelihood ascent plot to determine if convergence was reached with the chosen number of iterations. Finally, it is always best to visualize the observed data before fitting the model which also provides the user with an expected disease sequence to compare to the maximum likelihood estimate. This is especially helpful if prior understanding of disease sequence is not well known.
+## Conclusion     
+In this tutorial, we illustrated how to use the TBebm package to analyze data to classify TB severity using clinical measures observed at time of TB diagnosis. With our example data set TBebmData, we demonstrated how to do the following:   
+  
+* Visualize clinical events   
+* Estimate the disease event sequence   
+* Check the likelihood ascent plot for model convergence  
+* Generate bootstrap resamples and plot the PVD to visualize uncertainty  
+* Calculate predicted disease stage and plot the distribution
+     
+       
+We conclude with some considerations and best practices for practitioners wanting to analyze data with TBebm. 
 
+* The method we present was motivated by prior work in event-based modeling that was largely used to understand the progression of neurodegenerative diseases. When applying our method to TB data, we are not concerned with drawing conclusions about disease progression. We are using the EBM to classify disease severity at time of diagnosis only. It would not be appropriate to comment on disease progression as we know many assumptions for the EBM are not met with TB. 
+* Fitting the EBM requires collecting data that is strongly correlated with disease severity. For TB disease, we include measures that are well-established as predictors of treatment outcome and TB sterilization (cavitation, smear status, etc) and that are often used individually to stratify patients into categories that represent advanced versus early disease.   
+* Fitting the EBM also requires the user to input a value for p for each event included in the model. With TB diagnostic measures and chest x-ray data, we expect p to be close to 1. The user should always run a sensitivity analysis where they decrease p from their original model fit to assess the sensitivity of the maximum likelihood sequence to p.   
+* In theory we can include as many clinical measures and events as possible when fitting the EBM. The performance of the method decreases with smaller sample sizes, a larger number of events, and lower values of p for each event. We should consider these factors when choosing data to estimate the EBM. An additional challenge includes non-convergence when estimating the maximum likelihood sequence. This can potentially be mitigated by increasing the number of iterations during estimation but comes at the cost of increased computation time. The user should always check the likelihood ascent plot to determine if convergence was reached with the chosen number of iterations.   
+* Finally, it is always best to visualize the observed data before fitting the model which also provides the user with an expected disease sequence to compare to the maximum likelihood estimate. This is especially helpful if we are using the EBM as a hypothesis generating tool and do not already have a strong understanding about disease sequence or severity.  
 
 
 
