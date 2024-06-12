@@ -1,10 +1,11 @@
 ---
-title: "TBebm vignette"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Tbebm_vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "Tutorial for R Package TBebm"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 4
 ---
 
 ```{r, include = FALSE}
@@ -14,12 +15,120 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Introduction
+
+This tutorial introduces the TBebm package and walks through an example of using TBebm to classify tuberculosis (TB) disease severity. 
+
+First we install TBebm with:
+``` r
+# install.packages("devtools")
+devtools::install_github("samalatesta/TBebm")
+```
+
+If we want the results to match this tutorial, we first set the seed to match: 
+```{r seed}
+set.seed(0)
+```
+
+
+We then load the package by running:
 ```{r setup}
 library(TBebm)
 ```
 
+## Analysis Workflow
+We recommend the following workflow as a general guide for analyzing data with TBebm. Functions required are listed in parentheses:      
+1. Visualize clinical measures (plot_events())      
+2. Estimate model (fit_ebm())     
+3. Check likelihood ascent plot (plot_likes())     
+4. Reestimate model for m bootstrap resamples (bootstrap_seq())     
+5. Visualize uncertainty by making positional variance diagram (pvd())     
+6. Obtain predicted disease stage for each observation and plot distribution (get_stage() and plot_stage())     
+
+## Example Data Set   
+We provide a synthetic data set TBebmData in the TBebm package. We will use this data set to walk through an example of analyzing data with TBebm to classify TB disease severity.     
+
+### Description 
+In the table below, we provide a description of each variable included in the data set. 
+
+Variable | Description |
+:-------:| :--------------: | 
+Index | Unique row identifier | 
+stage | True disease stage | 
+X1 | Indicator for event 1 in clinical measure 1 | 
+X2 | Indicator for event 2 in clinical measure 1 |
+X3 |  Indicator for event 1 in clinical measure 2 |
+X4 |  Indicator for event 2 in clinical measure 2 | 
+X5 |  Indicator for event 3 in clinical measure 2 | 
+X6 |  Indicator for event 1 in clinical measure 3 |
+C1 |  Binary covariate |
+C2 |  Continuous covariate |  <br> 
 
 
-```{r TBebmData}
+The data set contains 250 rows where each row represents data observed on a unique individual. There are 10 columns in the data set. For each individual, we record the value for 6 disease events corresponding to 3 clinical measures, and we include 2 covariates. The motivation for including covariates is we are often interested in associations between different variables with disease severity. Each covariate was simulated to be positively correlated with disease stage. 
+
+```{r TBebmData str}
+data(TBebmData)
+str(TBebmData)
+```
+
+### True event sequence
+Here is the ground truth sequence of events that was used to generate TBebmData. There are 4 disease stages. Events X6, X1, and X3 occur simultaneously at stage 1: 
+
+Event | Stage |
+:-------:| :--------------: | 
+X1 | 1 | 
+X2 | 2 |
+X3 | 1|
+X4 | 3 | 
+X5 | 4 | 
+X6 | 1 | <br> 
+
+
+
+**Important Note**      
+  In theory we can include as many clinical measures and events as possible when fitting the EBM. The performance of the method decreases with smaller sample sizes, a larger number of events, and lower values of p for each event. We should consider these factors when choosing data to estimate the EBM. An additional challenge includes non-convergence when estimating the maximum likelihood sequence. This can potentially be mitigated by increasing the number of iterations during estimation but comes at the cost of increased computation time. 
+
+
+### Data Summary 
+
+
+Below we provide the first 6 rows of our example data set. The first observation in this data set is at disease stage 2. Events X1, X2, X3, and X6 have occurred as indicated with the value 1, and events X4 and X6 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.9 so each individual’s data may not align perfectly with their true disease stage. For example, observation 3 and 4 are both at stage 1. Given the ground truth sequence, we would expect X1, X3, and X6 to all have the value 1. For observation 4 this is true, but for observation 3, X6 is equal to 0. 
+```{r TBebmData first rows}
 head(TBebmData)
 ```
+
+Here is the distribution of disease stage. We can summarize true disease stage because we are using a simulated data set. We simulated disease stage originally using a uniform distribution, so we expect all stages to be approximately equally observed in the data. Notice here we have a disease stage 0 whereas in our true event sequence above we did not. This is because stage 0 is equivalent to no events having occurred. 
+```{r stage dist}
+prop.table(table(TBebmData$stage))
+```
+
+Here are the distributions for each covariate.
+```{r data dist}
+prop.table(table(TBebmData$C1))
+fivenum(TBebmData$C2)
+```
+## Example analysis
+
+### Visualize clinical measures
+
+### Estimate model
+
+### Likelihood ascent
+
+### Bootstrap resamples
+
+### Positional variance diagram
+
+### Predicted disease stage
+
+
+
+## Conclusion
+We conclude with some considerations and best practices for practitioners wanting to analyze data with TBebm. Fitting the EBM requires collecting data that is strongly correlated with disease severity. For TB disease, we include measures that are well-established as predictors of treatment outcome and TCC and that are often used individually to stratify patients into categories that represent advanced versus early disease. Fitting the EBM also requires the user to input a value for p for each event included in the model. With TB diagnostic measures and chest x-ray data, we expect p to be close to 1. The user should always run a sensitivity analysis where they decrease p from their original model fit to assess the sensitivity of the maximum likelihood sequence to p. The user should also always check the likelihood ascent plot to determine if convergence was reached with the chosen number of iterations. Finally, it is always best to visualize the observed data before fitting the model which also provides the user with an expected disease sequence to compare to the maximum likelihood estimate. This is especially helpful if prior understanding of disease sequence is not well known.
+
+
+
+
+
+
