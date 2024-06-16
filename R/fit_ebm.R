@@ -16,7 +16,7 @@ fit_ebm <- function(data,p_vec, info, nstart, initial_iter){
 
   #save sequences for prelim sequence search
   prelim_seq <- vector(mode='list', length=nstart)
-
+  all_likes <- data.frame(start=NA, iter=NA, like=NA)
  add <- possible_seqs(dim(info)[1])
 N=dim(info)[1]
   max_like <- rep(NA, nstart)
@@ -42,7 +42,7 @@ N=dim(info)[1]
 
     for(j in 1:initial_iter){
 
-      print(j)
+      #print(j)
 
       bio_info_long <- dplyr::arrange(current_seq, pos)
 
@@ -63,7 +63,7 @@ N=dim(info)[1]
         #print(bio_info_temp)
 
         #check if eligible sequence based on events within each bio
-        check <- bio_info_temp %>% arrange(order) %>% group_by(clinical_measure) %>% summarize(Result = all(diff(event_number) == 1)) %>% ungroup()
+        check <- bio_info_temp %>% dplyr::arrange(order) %>% dplyr::group_by(clinical_measure) %>% dplyr::summarize(Result = all(diff(event_number) == 1)) %>% dplyr::ungroup()
         #print(check)
         if(all(check$Result)){
           bio_info_long2 <- bio_info_temp %>% dplyr::arrange(order)
@@ -86,7 +86,7 @@ N=dim(info)[1]
 
 
       prelim_like_sub[j,1] <- current_likelihood
-
+      all_likes=rbind(all_likes, data.frame(start=i, iter=j, like=current_likelihood))
       #print(new)
       #if current sequence improves likelihood, update current likelihood and sequence
       if(temp_likelihood > current_likelihood){
@@ -111,10 +111,13 @@ N=dim(info)[1]
   }
 
   ml_seq <- prelim_seq[[which.max(max_like)]]
+  #ml_seq$est_seq <- ml_seq$sub
+  #ml_seq <- ml_seq %>% dplyr::select(-pos,-order, -sub)
 
+  all_likes <- na.omit(all_likes)
   #find maximum likelihood and corresponding sequence
 
-  return(list(prelim_like, prelim_seq, max_like, ml_seq))
+  return(list(prelim_like=prelim_like, prelim_seq=prelim_seq, ml=max_like, ml_seq=ml_seq, loglikes=all_likes))
 
 }
 

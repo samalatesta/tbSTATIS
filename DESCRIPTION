@@ -20,5 +20,6 @@ Imports:
     dplyr,
     ggplot2,
     gtools,
+    magrittr,
     reshape2
 RoxygenNote: 7.3.1

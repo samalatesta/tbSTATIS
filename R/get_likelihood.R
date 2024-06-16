@@ -57,7 +57,7 @@ get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
   normal <- 1-bio_order
 
   #special case stage 1
-  normal_prob = normal %>% mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
+  normal_prob = normal %>% dplyr::mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
   #normal_prob[which(normal_prob==0)] <- .1
 
   tot_prob_stage = normal_prob[,1]
@@ -78,10 +78,10 @@ get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
       normal_cols = as.numeric(rownames(S2[!(rownames(S2 )%in% abnormal_cols),]))
 
 
-      abnormal_prob = abnormal %>% mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
+      abnormal_prob = abnormal %>% dplyr::mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
       #abnormal_prob[which(abnormal_prob==0)] <- .1
 
-      normal_prob = normal %>% mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
+      normal_prob = normal %>% dplyr::mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
       #normal_prob[which(normal_prob==0)] <- .1
       #fill in empty matrix
       #abnormal_prob <- ifelse(sum(abnormal_n,normal_n)>0 & abnormal_n==0, .5*normal_prob, abnormal_prob)
@@ -100,7 +100,7 @@ get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
       #special case stage 1
       abnormal <- bio_order
 
-      abnormal_prob = abnormal %>% mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
+      abnormal_prob = abnormal %>% dplyr::mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
       #abnormal_prob[which(abnormal_prob==0)] <- .1
 
 
