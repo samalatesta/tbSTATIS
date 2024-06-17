@@ -3,10 +3,11 @@
 
 # TBebm
 
-<!-- badges: start -->
-<!-- badges: end -->
+![Package Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+<!-- badges: start --> <!-- badges: end -->
 
-The goal of TBebm is to …
+The TBebm package implements is to …
 
 ## Installation
 
@@ -18,35 +19,44 @@ You can install the development version of TBebm from
 devtools::install_github("samalatesta/TBebm")
 ```
 
-## Example
+## Features
 
-This is a basic example which shows you how to solve a common problem:
+## Installation
+
+You can install **TBebm** from GitHub using the `devtools` package:
+
+``` r
+# Install TBebm
+devtools::install_github("voverbec/tbEpiRDS")
+```
+
+## Usage
+
+To use TBebm in your R scripts or projects, load the package using:
 
 ``` r
 library(TBebm)
-## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+For detailed information on how to use each function, please refer to
+the package documentation and vignette.
+
+## Documentation
+
+Comprehensive documentation for TBebm functions is available within R.
+You can access documentation using the ? operator followed by the
+function name. For example:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+?plot_events
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+## License
 
-You can also embed plots, for example:
+TBebm is distributed under the MIT License.
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+## Contact
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+For questions or support, please contact:
+
+Samantha Malatesta (<samalate@bu.edu>)
