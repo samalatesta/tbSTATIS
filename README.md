@@ -59,6 +59,6 @@ TBebm is distributed under the MIT License.
 
 ## Contact
 
-For questions,upport, or contributions, please contact:
+For questions, support, or contributions, please contact:
 
 Samantha Malatesta (<samalate@bu.edu>)
