@@ -48,7 +48,7 @@ plot_events <- function(data=data.frame(), id.var=character(), event.vars=vector
 
 plot_stage <- function(pred_stage=vector()){
 
-  stagedf <- data.frame(stage=c(0:max(pred_stage)), prop = as.vector(prop.table(table(pred_stage),2)))
+  stagedf <- data.frame(stage=c(0:max(pred_stage)), prop = as.vector(prop.table(table(pred_stage))))
   stage_plot <- ggplot2::ggplot(data=stagedf) + ggplot2::geom_bar(ggplot2::aes(x=stage, y=prop), stat="identity", fill="#3A68AB") + ggplot2::theme_bw() + ggplot2::xlab("Disease Stage")+ ggplot2::ylab("Proportion") + ggplot2::scale_x_continuous(breaks=c(0:max(pred_stage)))+ ggplot2::theme(text=ggplot2::element_text(size=14))
   return(stage_plot)
 
