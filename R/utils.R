@@ -7,7 +7,7 @@
 #'
 
 
-get_group <- function( info=data.frame(), all_seqs=data.frame()){
+get_group <- function( info=data.frame(), all_seqs){
   #D=make_D(N)
   #seq=get_seq(D)
   #info<- seq
@@ -17,13 +17,14 @@ get_group <- function( info=data.frame(), all_seqs=data.frame()){
   #all_seqs=add
 
   all_seqs2=all_seqs
-  all_seqs=data.frame(t(apply(all_seqs[,1:N], 1, function(i) paste(i, info$clinical_measure) )))
+  all_seqs=data.frame(t(apply(all_seqs[,1:N], 1, function(i) paste(i, info$bio) )))
   all_seqs$unique= apply(all_seqs[,1:N], 1, function(x) length(unique(x)))==N
 
   final <-  cbind(all_seqs2, data.frame(unique=all_seqs$unique)) %>% dplyr::filter(unique==T)
   select <- sample(1:dim(final)[1],1)
 
   info$sub<- as.numeric(final[select,1:N])
+
 
   #print(info)
   return(info)
@@ -41,25 +42,32 @@ get_group <- function( info=data.frame(), all_seqs=data.frame()){
 #### Initialize sequence events
 get_seq <- function(info=data.frame()){
 
-  bio_info_long <- info
+  #transform D to long form
+  bio_info_long<- data.frame(bio=NA, event=NA)
+  for(i in 1: dim(info)[1]){
+    add <- data.frame(bio=rep(info[i,1]), event = c(1:info[i,2]))
+    bio_info_long <- rbind(bio_info_long, add)
 
+  }
+
+  bio_info_long <- bio_info_long %>% dplyr::filter(is.na(event)==F)
+
+  #bio_info_long <- ml[[2]][[1]]
   N=dim(bio_info_long)[1]
   bio_info_long$pos = c(1:N)
 
 
-  all_perms <-combinat::permn(bio_info_long[,1])
+  all_perms <- combinat::permn(bio_info_long$bio)
   r <- sample(1:length(all_perms),1)
   temp <- all_perms[[r]]
 
 
   bio_info_long_temp <- bio_info_long
   bio_info_long_temp$temp <- temp
-  bio_info_long_temp <-  dplyr::arrange(bio_info_long_temp,event_number,temp)
+  bio_info_long_temp <- bio_info_long_temp %>% dplyr::arrange(event,temp)
   bio_info_long_temp$order <- c(1:dim(bio_info_long_temp)[1])
 
-  bio_info_long_new <- dplyr::arrange(bio_info_long_temp,pos)
-  bio_info_long_new <- dplyr::select(bio_info_long_temp,-temp)
-
+  bio_info_long_new <- bio_info_long_temp %>% dplyr::arrange(pos) %>% dplyr::select(-temp)
   #bio_info_long_new
   return(bio_info_long_new)
 

@@ -23,7 +23,7 @@ installed prior to installing `TBebm`.
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("samalatesta/TBebm", build.vignette = T)
+devtools::install_github("samalatesta/TBcompass", build.vignette = T)
 ```
 
 ## Usage

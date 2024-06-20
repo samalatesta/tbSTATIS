@@ -7,11 +7,11 @@
 plot_likes(likes = data.frame())
 }
 \arguments{
-\item{likes}{A data frame.}
+\item{likes}{A data frame with three columns (start, iter, like).}
 }
 \value{
 A ggplot object.
 }
 \description{
-Plot likelihood ascent
+The function `plot_likes` generates a plot of the likelihood ascent from fitting the EBM. The x-axis is the iteration number, the y-axis is the log-likelihood, and each line represents the log-likelihood at each iteration for a single initialized sequence.
 }

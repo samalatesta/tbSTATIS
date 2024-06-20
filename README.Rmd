@@ -28,7 +28,7 @@ You can install the development version of `TBebm` from [GitHub](https://github.
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("samalatesta/TBebm", build.vignette = T)
+devtools::install_github("samalatesta/TBcompass", build.vignette = T)
 ```
 ## Usage
 

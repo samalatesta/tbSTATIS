@@ -4,7 +4,7 @@
 \alias{get_group}
 \title{Propose simultaneous events}
 \usage{
-get_group(info = data.frame(), all_seqs = data.frame())
+get_group(info = data.frame(), all_seqs)
 }
 \arguments{
 \item{info}{A data frame.}

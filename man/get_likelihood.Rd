@@ -4,7 +4,7 @@
 \alias{get_likelihood}
 \title{Calculate log-likelihood}
 \usage{
-get_likelihood(data = data.frame(), S = data.frame(), p = vector())
+get_likelihood(data = data.frame(), S = data.frame(), p_vec = vector())
 }
 \arguments{
 \item{data}{A data frame.}

@@ -43,6 +43,12 @@ We then load the package by running:
 library(TBebm)
 ```
 
+We often collect information from multiple data sources such as symptoms, sputum culture, sputum smear microscopy, and chest radiography during the process of diagnosing patients with TB. While this information is used to inform TB diagnosis, it is also strongly correlated with TB disease severity. Common approaches to categorizing TB severity include using smear microscopy or cavitation on chest x-ray alone offering only a binary view of the TB disease spectrum. We aimed to develop a method that integrates all available data to classify disease severity and provide a more detailed understanding TB disease severity at clinical presentation. 
+
+Data-driven disease progression modeling offers methods to reconstruct a disease timeline and estimate the trajectory along this timeline informed directly by observed data (Oxtoby, 2023). There have been numerous adaptations and extensions of the event-based model (EBM) for disease progression that have primarily been developed for the purposes of understanding the progression and trajectory of different neurodegenerative diseases (Fonteijn et al., 2012; Venkatraghavan et al., 2019; Young et al., 2014). 
+
+We leverage the EBM framework to classify different TB disease severity states at time of TB diagnosis. A benefit of the EBM is we only require cross-sectional data to fit the model which aligns with observing individuals only at time of TB diagnosis. The EBM allows us to integrate all clinical information to obtain a predicted disease stage that we use as a proxy for TB severity. We present the TBebm package to implement our method. We provide this tutorial as a guide for conducting data analysis with TBebm. 
+
 ## Analysis Workflow
 We recommend the following workflow as a general guide for analyzing data with TBebm. Functions required are listed in parentheses:      
 1. Visualize clinical measures (plot_events())      
@@ -99,7 +105,7 @@ X6 | 1 | <br>
 ### Data Summary 
 
 
-Below we provide the first 6 rows of our example data set. The first observation in this data set is at disease stage 2. Events X1, X2, X3, and X6 have occurred as indicated with the value 1, and events X4 and X6 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.95 so each individual’s data may not align perfectly with their true disease stage. For example, observation 3 and 4 are both at stage 1. Given the ground truth sequence, we would expect X1, X3, and X6 to all have the value 1. For observation 4 this is true, but for observation 3, X6 is equal to 0. 
+Below we provide the first 6 rows of our example data set. The first observation in this data set is at disease stage 2. Events X1, X2, X3, and X6 have occurred as indicated with the value 1, and events X4 and X6 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.9 so each individual’s data may not align perfectly with their true disease stage. For example, observation 3 and 4 are both at stage 1. Given the ground truth sequence, we would expect X1, X3, and X6 to all have the value 1. For observation 4 this is true, but for observation 3, X6 is equal to 0. 
 ```{r TBebmData first rows}
 head(TBebmData)
 ```
@@ -133,7 +139,7 @@ print(measure_info)
 ```
 The fit_ebm function returns a list. One object in the list called ml_seq is a data frame with 4 columns (measure, event_number, event_name, est_seq). The stage column in this data frame is the maximum likelihood sequence. We present the maximum likelihood sequence for TBebmData. We ran the model with only 3 start points and 250 iterations but in practice the minimum number of start points should be 10 with at least 2000 iterations. From this output, the maximum likelihood sequence is ({X6, X1, X3}, {X2}, {X4},{X5}) which is the same as our ground truth sequence. 
 ```{r fit ebm}
-model1 = fit_ebm(data=TBebmData[,c(1,3:8)], p_vec=c(.95,.95,.95,.95,.95,.95), info=measure_info, nstart=3,initial_iter= 500)
+model1 = fit_ebm(data=TBebmData[,c(3:8)], p_vec=c(.9,.9,.9,.9,.9,.9), clinical_info=measure_info, nstart=3,initial_iter= 250)
 
 #print maximum likelihood estimate
 print(model1$ml_seq)
@@ -141,11 +147,13 @@ print(model1$ml_seq)
 
    
 ### Likelihood ascent
-After estimating the model, we assess model convergence by plotting the likelihood ascent for each start point using the plot_likes funtion. The loglikelihoods for all iterations can be accessed from the saved model object. For example, we saved our model as model1 above and we can call model1$loglikes which is a dataframe that contains all loglikelihoods across all iterations and start points. We present the likelihood ascent plot for estimating the model with TBebmData. We see all start points converged within the first 50 iterations. When running the EBM with real data, it is likely the EBM will not converge until at least 1000 iterations. When fitting the model we recommend checking convergence by plotting the likelihood ascent and if convergence is very slow or does not occur then to increase the total number of iterations and/or start points and rerun the model. 
+After estimating the model, we assess model convergence by plotting the likelihood ascent for each start point using the plot_likes function. The log-likelihoods for all iterations can be accessed from the saved model object. For example, we saved our model as model1 above and we can call model1$loglikes which is a dataframe that contains all log-likelihoods across all iterations and start points. We present the likelihood ascent plot for estimating the model with TBebmData. We see all start points converged within the first 50 iterations. When running the EBM with real data, it is likely the EBM will not converge until at least 1000 iterations. When fitting the model we recommend checking convergence by plotting the likelihood ascent and if convergence is very slow or does not occur then to increase the total number of iterations and/or start points and rerun the model. 
 
 ```{r likelihood ascent}
+#first 6 rows of loglikes data frame
 head(model1$loglikes)
 
+#plot log-likelihoods for all iterations and start points
 plot_likes(model1$loglikes)
 ```
 
@@ -153,19 +161,17 @@ plot_likes(model1$loglikes)
 After fitting the model, we recommend constructing a positional variance diagram to visualize uncertainty in the maximum likelihood sequence. We provide the function bootstrap_seq to refit the model on a chosen number of resamples with replacement from the observed data. We recommend using at least 100 resamples. This function requires the same inputs as fit_ebm with the additional argument z which is the total number of bootstrap resamples. The function returns a data frame where each row represents the sequence estimated for 1 resample from our observed data. We ran bootstrap_seq with TBebmData and our estimated sequence above. We present the first 6 rows of output. If our model fits the data well, we expect a majority of the bootstrap sequences to be the same as our maximum likelihood sequence. Like with fit_ebm, in practice a mininum of 1000 iterations and 10 start points should be used. 
 ```{r bootstrap sequences}
 
-boot_seqs = bootstrap_seq(z=25,data=TBebmData[,c(1,3:8)], p_vec=c(.95,.95,.95,.95,.95,.95), info=measure_info, nstart=1,initial_iter= 5)
+boot_seqs = bootstrap_seq(z=25,data=TBebmData[,c(3:8)], p_vec=c(.9,.9,.9,.9,.9,.9), clinical_info=measure_info, nstart=1,initial_iter= 250)
 
 head(boot_seqs)
 ```
 
 ### Positional variance diagram
-After obtaining bootstrap sequences, we plot them in a PVD to visualize the location and degree of uncertainty for our maximum likelihood sequence using the function pvd. The function requires a data frame of bootstrap sequences and the maximum likelihood sequence as input.  The function returns a heatmap where the x-axis is disease stage and the y axis is each event in order of the maximum likelihood sequence. Each square in the plot represents the proportion of bootstrap sequences where each event occurs at each disease stage. Darker colors indicated a higher proportion. The disease stage estimated for each event in the maximum likelihood sequence is outlined in black. We expect the highest proportion for each event to occur at the stage where the event occurs in the maximum likelihood sequence.    
+After obtaining bootstrap sequences, we plot them in a positional variance diagram (PVD) to visualize the location and degree of uncertainty for our maximum likelihood sequence using the function pvd. The function requires a data frame of bootstrap sequences and the maximum likelihood sequence as input.  The function returns a heatmap where the x-axis is disease stage and the y axis is each event in order of the maximum likelihood sequence. Each square in the plot represents the proportion of bootstrap sequences where each event occurs at each disease stage. Darker colors indicate a higher proportion/degree of certainty. The disease stage estimated for each event in the maximum likelihood sequence is outlined in black. We expect the highest proportion of bootstrap samples for each event to occur at the stage where the event occurs in the maximum likelihood sequence.    
    
-We provide the PVD for the bootstrap samples for TBebmData below. A majority of our boostrap sequences were equivalent to the maximum likelihood sequence. We observe uncertainty for events X3 to X5 where a small proportion of sequences estimated these events to occur one stage later than the maximum likelihood sequence. It is important to note that the x axis for the pvd ranges from 1 to 6 to account for the fact that some bootstrap sequences may have a different number of stages than our maximum likelihood estimate. The maximum number of stages is always equal to the total number of events; for our example data set this is 6. 
+We provide the PVD for the bootstrap samples for TBebmData below. A majority of our bootstrap sequences were equivalent to the maximum likelihood sequence. We observe uncertainty for events X3 to X5 where a small proportion of sequences estimated these events to occur one stage later than the maximum likelihood sequence. It is important to note that the x axis for the pvd ranges from 1 to 6 to account for the fact that some bootstrap sequences may have a different number of stages than our maximum likelihood estimate. The maximum number of stages is always equal to the total number of events; for our example data set this is 6. 
 ```{r positional variance diagram}
-
 pvd(boot_seqs = boot_seqs, ml=model1$ml_seq)
-
 ```
 
 ### Predicted disease stage
@@ -175,13 +181,14 @@ Our primary goal with using the EBM to understand TB disease severity is to obta
 Predicted disease can be analyzed as an outcome as researchers are frequently interested in factors associated with increased disease severity. Disease stage can also be use in secondary analysis as a predictor when modeling other outcomes of interest. 
 ```{r disease stage}
 #save estimated sequence from model
-est_seq=model1[[4]]
+est_seq=model1$ml_seq
 
 #calculate predicted disease stage
-stagedf <- get_stage(data=TBebmData[,c(1,3:8)], est_seq, c(.95,.95,.95,.95,.95,.95))
+stagedf <- get_stage(data=TBebmData[,c(3:8)], est_seq, c(.9,.9,.9,.9,.9,.9))
 
 #print first rows of data frame that includes predicted disease stage
 head(stagedf)
+
 #plot predicted disease stage
 plot_stage(pred_stage=stagedf$pred_stage)
 ```
@@ -193,7 +200,7 @@ In this tutorial, we illustrated how to use the TBebm package to analyze data to
 * Visualize clinical events   
 * Estimate the disease event sequence   
 * Check the likelihood ascent plot for model convergence  
-* Generate bootstrap resamples and plot the PVD to visualize uncertainty  
+* Generate bootstrap resamples and plot the positional variance diagram to visualize uncertainty  
 * Calculate predicted disease stage and plot the distribution
      
        
@@ -204,8 +211,6 @@ We conclude with some considerations and best practices for practitioners wantin
 * Fitting the EBM also requires the user to input a value for p for each event included in the model. With TB diagnostic measures and chest x-ray data, we expect p to be close to 1. The user should always run a sensitivity analysis where they decrease p from their original model fit to assess the sensitivity of the maximum likelihood sequence to p.   
 * In theory we can include as many clinical measures and events as possible when fitting the EBM. The performance of the method decreases with smaller sample sizes, a larger number of events, and lower values of p for each event. We should consider these factors when choosing data to estimate the EBM. An additional challenge includes non-convergence when estimating the maximum likelihood sequence. This can potentially be mitigated by increasing the number of iterations during estimation but comes at the cost of increased computation time. The user should always check the likelihood ascent plot to determine if convergence was reached with the chosen number of iterations.   
 * Finally, it is always best to visualize the observed data before fitting the model which also provides the user with an expected disease sequence to compare to the maximum likelihood estimate. This is especially helpful if we are using the EBM as a hypothesis generating tool and do not already have a strong understanding about disease sequence or severity.  
-
-
-
+* It is important to note that we present TBebm and this tutorial in the context of classifying TB disease severity but the the model and analysis we present are not specific to TB. The methods we developed could be used to understand disease dynamics for other chronic diseases that progress over time where we are able to measure events that are strongly correlated with the disease process. 
 
 

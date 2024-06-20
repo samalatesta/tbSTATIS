@@ -57,8 +57,10 @@ plot_stage <- function(pred_stage=vector()){
 
 
 #' Plot likelihood ascent
+#' @description
+#' The function `plot_likes` function generates a plot of the likelihood ascent from fitting the EBM. The x-axis is the iteration number, the y-axis is the log-likelihood, and each line represents the log-likelihood at each iteration for a single initialized sequence.
 #'
-#' @param likes A data frame.
+#' @param likes A data frame with three columns (start, iter, like).
 #' @return A ggplot object.
 
 

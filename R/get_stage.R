@@ -6,7 +6,7 @@
 
 get_stage <- function(data=data.frame(), S=data.frame(), p=vector()){
 
-data=dplyr::arrange(data,Index)
+#data=dplyr::arrange(data,Index)
 likelihood=get_likelihood(data, S, p )
 
 stage_probs <- likelihood[[2]]

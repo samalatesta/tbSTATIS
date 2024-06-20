@@ -16,12 +16,15 @@
 #' @param p A vector
 #' @return A list.
 
-
-get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
+#S=current_seq
+get_likelihood <- function(data=data.frame(), S=data.frame(), p_vec=vector()){
   #S=t
 
-
-  bio <- data.frame(data[,2:ncol(data)])
+  #S=t
+  #p<- c(.8,.8,.8, .8, .8)
+  #data=dat
+  #p=c(.9,.9,.9,.9)
+  bio <- data.frame(data[,1:ncol(data)])
 
   # number of biomarkers
   N = as.numeric(dim(bio)[2])
@@ -33,9 +36,9 @@ get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
 
   #multiply each p by each corresponding variable
   for(i in 1:dim(new_bio)[2]){
-    x<- S$clinical_measure[i]
-    n <- sum(S$clinical_measure==x)
-    new_bio[,i] <- ifelse(new_bio[,i]==1, dbinom(1,1,p[i]), dbinom(0,1,p[i])/max(n,1))
+    x<- S$bio[i]
+    n <- sum(S$bio==x)
+    new_bio[,i] <- ifelse(new_bio[,i]==1, dbinom(1,1,p_vec[i]), dbinom(0,1,p_vec[i])/max(n,1))
   }
 
 
@@ -76,6 +79,12 @@ get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
 
       #normal data assuming S is true sequence
       normal_cols = as.numeric(rownames(S2[!(rownames(S2 )%in% abnormal_cols),]))
+
+      normal <- 1-data.frame(bio_order[,normal_cols])
+      normal[normal==-1]<- 1
+      abnormal_n <- apply(abnormal, 1, sum)
+      normal_n <- apply(normal, 1, function(x) sum(x==0))
+
 
 
       abnormal_prob = abnormal %>% dplyr::mutate(prod = apply(., 1, prod, na.rm=T)) %>% dplyr::select(prod)
@@ -118,6 +127,7 @@ get_likelihood <- function(data=data.frame(), S=data.frame(), p=vector()){
   total_prob_subj = apply(prob_subj,1,sum, na.rm=T)
 
   loglike = sum(log(total_prob_subj + 1e-250))
+
 
   return(list(p_perm_k, prob_subj, total_prob_subj, loglike))
 }

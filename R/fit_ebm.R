@@ -6,26 +6,32 @@
 #' @param nstart Number of initialization points
 #' @param initial_iter Number of iterations
 #' @return A list
-
-
+#initial_iter=500
 #Input
+#info <- D
+
+#fit_ebm(data, p_vec, info, nstart=1, initial_iter=100)
 #Data set, measures info, number of start points,
-fit_ebm <- function(data,p_vec, info, nstart, initial_iter){
+fit_ebm <- function(data,p_vec,clinical_info, nstart, initial_iter){
+  #clinical_info=measure_info
+  info <- clinical_info %>% dplyr::group_by(clinical_measure) %>% dplyr::summarise(events=dplyr::n())
+  info <- data.frame(info)
+  colnames(info) <- c("bio", "events")
   #save likelihoods for prelim sequence search
   prelim_like <- vector(mode='list', length=nstart)
 
   #save sequences for prelim sequence search
   prelim_seq <- vector(mode='list', length=nstart)
   all_likes <- data.frame(start=NA, iter=NA, like=NA)
- add <- possible_seqs(dim(info)[1])
-N=dim(info)[1]
+  add <- possible_seqs(sum(info$events))
+  N=dim(info)[1]
   max_like <- rep(NA, nstart)
   for(i in 1:nstart){
 
     all_seqs <- vector(mode='list', length=nstart)
 
     start_seq <- get_seq(info)
-
+start_seq
     start_group <- get_group(start_seq, add)
 
     current_likelihood <- get_likelihood(data, start_group,p_vec)[[4]]
@@ -63,7 +69,7 @@ N=dim(info)[1]
         #print(bio_info_temp)
 
         #check if eligible sequence based on events within each bio
-        check <- bio_info_temp %>% dplyr::arrange(order) %>% dplyr::group_by(clinical_measure) %>% dplyr::summarize(Result = all(diff(event_number) == 1)) %>% dplyr::ungroup()
+        check <- bio_info_temp %>% dplyr::arrange(order) %>% dplyr::group_by(bio) %>% dplyr::summarize(Result = all(diff(event) == 1)) %>% dplyr::ungroup()
         #print(check)
         if(all(check$Result)){
           bio_info_long2 <- bio_info_temp %>% dplyr::arrange(order)
@@ -111,6 +117,8 @@ N=dim(info)[1]
   }
 
   ml_seq <- prelim_seq[[which.max(max_like)]]
+
+  ml_seq <- cbind(ml_seq, event_name=data.frame(event_name=clinical_info$event_name))
   #ml_seq$est_seq <- ml_seq$sub
   #ml_seq <- ml_seq %>% dplyr::select(-pos,-order, -sub)
 
@@ -120,4 +128,5 @@ N=dim(info)[1]
   return(list(prelim_like=prelim_like, prelim_seq=prelim_seq, ml=max_like, ml_seq=ml_seq, loglikes=all_likes))
 
 }
+
 
