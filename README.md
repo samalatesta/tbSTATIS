@@ -1,25 +1,25 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# TBebm
+# TBcompass
 
 ![Package Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: start --> <!-- badges: end -->
 
-The TBebm package implements the event-based model to classify disease
-severity for TB patients using data collected at time of diagnosis. We
-include functions to estimate the model, quantify model uncertainty, and
-visualize results. We provide a detailed vignette that walks through an
-example analysis using `TBebm`.
+The TBcompass package implements the event-based model to classify
+disease severity for TB patients using data collected at time of
+diagnosis. We include functions to estimate the model, quantify model
+uncertainty, and visualize results. We provide a detailed vignette that
+walks through an example analysis using `TBcompass`.
 
 ## Installation
 
-You can install the development version of `TBebm` from
+You can install the development version of `TBcompass` from
 [GitHub](https://github.com/). We recommend setting the option
 `build_vignettes=T` when installing so the package vignette can be
 accessed in your local R environment. The `devtools` package must be
-installed prior to installing `TBebm`.
+installed prior to installing `TBcompass`.
 
 ``` r
 # install.packages("devtools")
@@ -28,10 +28,11 @@ devtools::install_github("samalatesta/TBcompass", build.vignette = T)
 
 ## Usage
 
-To use `TBebm` in your R scripts or projects, load the package using:
+To use `TBcompass` in your R scripts or projects, load the package
+using:
 
 ``` r
-library(TBebm)
+library(TBcompass)
 ```
 
 For detailed information on how to use each function, please refer to
@@ -40,13 +41,13 @@ locally after package installation or the knitted html is also included
 in the `\vignettes` directory.
 
 ``` r
-vignette(package="TBebm")
+vignette(package="TBcompass")
 ```
 
 ## Documentation
 
-Comprehensive documentation for TBebm functions is available within R.
-You can access documentation using the ? operator followed by the
+Comprehensive documentation for TBcompass functions is available within
+R. You can access documentation using the ? operator followed by the
 function name. For example:
 
 ``` r
@@ -55,7 +56,7 @@ function name. For example:
 
 ## License
 
-TBebm is distributed under the MIT License.
+TBcompass is distributed under the MIT License.
 
 ## Contact
 
