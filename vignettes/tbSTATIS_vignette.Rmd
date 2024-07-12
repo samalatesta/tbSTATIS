@@ -1,5 +1,5 @@
 ---
-title: "Tutorial for R Package TBcompass"
+title: "Tutorial for R Package tbSTATIS"
 output:
   html_document:
     toc: true
@@ -10,7 +10,7 @@ output:
     toc: true
     toc_depth: '4'
 vignette: >
-  %\VignetteIndexEntry{TBcompass_vignette}
+  %\VignetteIndexEntry{tbSTATIS_vignette}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -40,7 +40,7 @@ set.seed(0)
 
 We then load the package by running:
 ```{r setup}
-library(TBcompass)
+library(tbSTATIS)
 ```
 
 We often collect information from multiple data sources such as symptoms, sputum culture, sputum smear microscopy, and chest radiography during the process of diagnosing patients with TB. While this information is used to inform TB diagnosis, it is also strongly correlated with TB disease severity. Common approaches to categorizing TB severity include using smear microscopy or cavitation on chest x-ray alone offering only a binary view of the TB disease spectrum. We aimed to develop a method that integrates all available data to classify disease severity and provide a more detailed understanding TB disease severity at clinical presentation. 
