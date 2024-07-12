@@ -13,5 +13,5 @@ plot_likes(likes = data.frame())
 A ggplot object.
 }
 \description{
-The function `plot_likes` generates a plot of the likelihood ascent from fitting the EBM. The x-axis is the iteration number, the y-axis is the log-likelihood, and each line represents the log-likelihood at each iteration for a single initialized sequence.
+The function `plot_likes` function generates a plot of the likelihood ascent from fitting the EBM. The x-axis is the iteration number, the y-axis is the log-likelihood, and each line represents the log-likelihood at each iteration for a single initialized sequence.
 }

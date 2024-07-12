@@ -51,7 +51,7 @@ R. You can access documentation using the ? operator followed by the
 function name. For example:
 
 ``` r
-?plot_events
+?plot_scores
 ```
 
 ## License

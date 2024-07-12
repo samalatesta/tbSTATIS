@@ -1,6 +1,6 @@
-#' TBebmData
+#' TBData
 #'
-#' A simulated data set to fit the EBM. The data contains 3 clinical measures with 2,3,and 1 events respectively for a total of 6 disease events.
+#' A simulated data set to fit TB-STATIS. The data contains 3 clinical measures with 2,3,and 1 events respectively for a total of 6 disease events.
 #'
 #' @format
 #' A data frame with 250 rows and 8 columns:
@@ -16,4 +16,4 @@
 #'   \item{C1}{Covariate, categorical}
 #'   \item{C2}{Covariate, continuous}
 #' }
-"TBebmData"
+"TBData"

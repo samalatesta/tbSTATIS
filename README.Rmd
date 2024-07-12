@@ -47,7 +47,7 @@ vignette(package="tbSTATIS")
 Comprehensive documentation for tbSTATIS functions is available within R. You can access documentation using the ? operator followed by the function name. For example:
 
 ```R
-?plot_events
+?plot_scores
 ```
 
 

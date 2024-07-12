@@ -24,12 +24,12 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This tutorial introduces the TBcompass package and walks through an example of using TBcompass to classify tuberculosis (TB) disease severity. 
+This tutorial introduces the tbSTATIS package and walks through an example of using tbSTATIS to classify tuberculosis (TB) disease severity. 
 
-First we install TBcompass with:
+First we install tbSTATIS with:
 ``` r
 # install.packages("devtools")
-devtools::install_github("samalatesta/TBcompass")
+devtools::install_github("samalatesta/tbSTATIS")
 ```
 
 If we want the results to match this tutorial, we first set the seed to match: 
@@ -47,10 +47,10 @@ We often collect information from multiple data sources such as symptoms, sputum
 
 Data-driven disease progression modeling offers methods to reconstruct a disease timeline and estimate the trajectory along this timeline informed directly by observed data (Oxtoby, 2023). There have been numerous adaptations and extensions of the event-based model (EBM) for disease progression that have primarily been developed for the purposes of understanding the progression and trajectory of different neurodegenerative diseases (Fonteijn et al., 2012; Venkatraghavan et al., 2019; Young et al., 2014). 
 
-We leverage the EBM framework to classify different TB disease severity states at time of TB diagnosis. A benefit of the EBM is we only require cross-sectional data to fit the model which aligns with observing individuals only at time of TB diagnosis. The EBM allows us to integrate all clinical information to obtain a predicted disease stage that we use as a proxy for TB severity. We present the TBcompass package to implement our method. We provide this tutorial as a guide for conducting data analysis with TBcompass. 
+We leverage the EBM framework to classify different TB disease severity states at time of TB diagnosis. A benefit of the EBM is we only require cross-sectional data to fit the model which aligns with observing individuals only at time of TB diagnosis. The EBM allows us to integrate all clinical information to obtain a predicted disease stage that we use as a proxy for TB severity. We present the tbSTATIS package to implement our method. We provide this tutorial as a guide for conducting data analysis with tbSTATIS. 
 
 ## Analysis Workflow
-We recommend the following workflow as a general guide for analyzing data with TBcompass. Functions required are listed in parentheses:      
+We recommend the following workflow as a general guide for analyzing data with tbSTATIS. Functions required are listed in parentheses:      
 1. Visualize clinical measures (plot_events())      
 2. Estimate model (fit_ebm())     
 3. Check likelihood ascent plot (plot_likes())     
@@ -59,7 +59,7 @@ We recommend the following workflow as a general guide for analyzing data with T
 6. Obtain predicted disease stage for each observation and plot distribution (get_stage() and plot_stage())     
 
 ## Example Data Set   
-We provide a synthetic data set TBcompassData in the TBcompass package. We will use this data set to walk through an example of analyzing data with TBcompass to classify TB disease severity.     
+We provide a synthetic data set tbSTATISData in the tbSTATIS package. We will use this data set to walk through an example of analyzing data with tbSTATIS to classify TB disease severity.     
 
 ### Description 
 In the table below, we provide a description of each variable included in the data set. 
