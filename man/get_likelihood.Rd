@@ -11,7 +11,7 @@ get_likelihood(data = data.frame(), S = data.frame(), p_vec = vector())
 
 \item{S}{Data frame}
 
-\item{p}{A vector}
+\item{p_vec}{A vector}
 }
 \value{
 A list.

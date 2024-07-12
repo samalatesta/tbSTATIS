@@ -13,7 +13,7 @@
 #'
 #' @param data A data frame.
 #' @param S Data frame
-#' @param p A vector
+#' @param p_vec A vector
 #' @return A list.
 
 #S=current_seq

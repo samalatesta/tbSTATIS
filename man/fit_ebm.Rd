@@ -11,11 +11,11 @@ fit_ebm(data, p_vec, clinical_info, nstart, initial_iter)
 
 \item{p_vec}{Unique row identifier.}
 
+\item{clinical_info}{A data frame}
+
 \item{nstart}{Number of initialization points}
 
 \item{initial_iter}{Number of iterations}
-
-\item{info}{A data frame}
 }
 \value{
 A list

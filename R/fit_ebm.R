@@ -1,7 +1,7 @@
 #' Find maximum likelihood estimate
 #'
 #' @param data A data frame.
-#' @param info A data frame
+#' @param clinical_info A data frame
 #' @param p_vec Unique row identifier.
 #' @param nstart Number of initialization points
 #' @param initial_iter Number of iterations

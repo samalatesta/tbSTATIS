@@ -97,7 +97,7 @@ set.seed(123)
   dat3 <- cbind(dat2, C1, C2)
 
   #set up data frame
-  TBcompassData <- dat3
+  TBData <- dat3
 
 
   info=measure_info
@@ -112,5 +112,5 @@ set.seed(123)
   x=fit_ebm(data, p_vec, info, nstart=4, initial_iter=300 )
   TBebm::get_likelihood(data, ml, p_vec)
 
-  usethis::use_data(TBcompassData, overwrite = TRUE)
+  usethis::use_data(TBData, overwrite = TRUE)
 

@@ -11,13 +11,13 @@ bootstrap_seq(z, data, clinical_info, p_vec, nstart, initial_iter)
 
 \item{data}{A data frame.}
 
+\item{clinical_info}{A data frame}
+
 \item{p_vec}{Unique row identifier.}
 
 \item{nstart}{Number of initialization points}
 
 \item{initial_iter}{Number of iterations}
-
-\item{info}{A data frame}
 }
 \value{
 A list
