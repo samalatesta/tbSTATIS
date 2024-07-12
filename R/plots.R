@@ -3,7 +3,7 @@
 #' @param data A data frame.
 #' @param id.var Unique row identifier.
 #' @param event.vars Variable names for clinical events.
-#' @return A ggplot object. g
+#' @return A ggplot object.
 
 
 plot_events <- function(data=data.frame(), id.var=character(), event.vars=vector()){
