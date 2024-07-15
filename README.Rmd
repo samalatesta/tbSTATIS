@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The tbSTATIS package implements the tuberculosis SeveriTy Assessment Tool for Informed Stratification(TB-STATIS) to classify TB disease severity for  individuals using data collected at time of diagnosis. We include functions to estimate the model, quantify model uncertainty, and visualize results. We provide a detailed vignette that walks through an example analysis using `tbSTATIS`. 
+The `tbSTATIS` package implements the tuberculosis SeveriTy Assessment Tool for Informed Stratification (TB-STATIS) to classify TB disease severity for  individuals using data collected at time of diagnosis. We include functions to estimate the model, quantify model uncertainty, and visualize results. We provide a detailed vignette that walks through an example analysis using `tbSTATIS`. 
 
 ## Installation
 
@@ -47,7 +47,7 @@ vignette(package="tbSTATIS")
 Comprehensive documentation for tbSTATIS functions is available within R. You can access documentation using the ? operator followed by the function name. For example:
 
 ```R
-?plot_scores
+?plot_states
 ```
 
 
@@ -57,7 +57,7 @@ tbSTATIS is distributed under the MIT License.
 
 ## Contact
 
-For questions, support, or contributions, please contact:
+For questions, please contact:
 
 Samantha Malatesta (samalate@bu.edu)
 

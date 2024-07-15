@@ -7,12 +7,12 @@
 #' \describe{
 #'   \item{Index}{unique row identifier}
 #'   \item{stage}{disease stage}
-#'   \item{X1}{Clinical measure 1, level 1}
-#'   \item{X2}{Clinical measure 1, level 2}
-#'   \item{X3}{Clinical measure 2, level 1}
-#'   \item{X4}{Clinical measure 2, level 2}
-#'   \item{X5}{Clinical measure 2, level 3}
-#'   \item{X6}{Clinical measure 3, level 1}
+#'   \item{X1}{Clinical measure 1, state 1}
+#'   \item{X2}{Clinical measure 1, state 2}
+#'   \item{X3}{Clinical measure 2, state 1}
+#'   \item{X4}{Clinical measure 2, state 2}
+#'   \item{X5}{Clinical measure 2, state 3}
+#'   \item{X6}{Clinical measure 3, state 1}
 #'   \item{C1}{Covariate, categorical}
 #'   \item{C2}{Covariate, continuous}
 #' }

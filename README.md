@@ -7,8 +7,8 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: start --> <!-- badges: end -->
 
-The tbSTATIS package implements the tuberculosis SeveriTy Assessment
-Tool for Informed Stratification(TB-STATIS) to classify TB disease
+The `tbSTATIS` package implements the tuberculosis SeveriTy Assessment
+Tool for Informed Stratification (TB-STATIS) to classify TB disease
 severity for individuals using data collected at time of diagnosis. We
 include functions to estimate the model, quantify model uncertainty, and
 visualize results. We provide a detailed vignette that walks through an
@@ -51,7 +51,7 @@ R. You can access documentation using the ? operator followed by the
 function name. For example:
 
 ``` r
-?plot_scores
+?plot_states
 ```
 
 ## License
@@ -60,6 +60,6 @@ tbSTATIS is distributed under the MIT License.
 
 ## Contact
 
-For questions, support, or contributions, please contact:
+For questions, please contact:
 
 Samantha Malatesta (<samalate@bu.edu>)

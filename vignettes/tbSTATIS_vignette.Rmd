@@ -43,23 +43,32 @@ We then load the package by running:
 library(tbSTATIS)
 ```
 
-We often collect information from multiple data sources such as symptoms, sputum culture, sputum smear microscopy, and chest radiography during the process of diagnosing patients with TB. While this information is used to inform TB diagnosis, it is also strongly correlated with TB disease severity. Common approaches to categorizing TB severity include using smear microscopy or cavitation on chest x-ray alone offering only a binary view of the TB disease spectrum. We aimed to develop a method that integrates all available data to classify disease severity and provide a more detailed understanding TB disease severity at clinical presentation. 
+We often collect information from multiple data sources such as symptoms, sputum culture, sputum smear microscopy, and chest radiography during the process of diagnosing persons with TB. While this information is used to inform TB diagnosis, it is also strongly correlated with TB disease severity. Common approaches to categorizing TB severity include using smear microscopy or cavitation on chest x-ray alone offering only a binary view of the TB disease spectrum. 
 
-Data-driven disease progression modeling offers methods to reconstruct a disease timeline and estimate the trajectory along this timeline informed directly by observed data (Oxtoby, 2023). There have been numerous adaptations and extensions of the event-based model (EBM) for disease progression that have primarily been developed for the purposes of understanding the progression and trajectory of different neurodegenerative diseases (Fonteijn et al., 2012; Venkatraghavan et al., 2019; Young et al., 2014). 
+We developed the **tuberculosis SeveriTy Assessment Tool for Informed Stratification (TB-STATIS)** as a data-driven approach to classifying TB disease severity that integrates information from multiple data sources at time of TB diagnosis to assign individuals to a predicted disease severity class. TB-STATIS only requires cross-sectional data as input and does not require knowing a clinical outcome as part of the classification process. 
 
-We leverage the EBM framework to classify different TB disease severity states at time of TB diagnosis. A benefit of the EBM is we only require cross-sectional data to fit the model which aligns with observing individuals only at time of TB diagnosis. The EBM allows us to integrate all clinical information to obtain a predicted disease stage that we use as a proxy for TB severity. We present the tbSTATIS package to implement our method. We provide this tutorial as a guide for conducting data analysis with tbSTATIS. 
+## TB-STATIS Terminology  
+
+
+Term | Definition |
+:-------:| :--------------: | 
+Clinical Measure | Information collected during TB diagnosis that is associated with disease severity. ex: symptoms, chest-xray, etc | 
+Clinical State | Each clinical measure has a set of clinical states. ex: The clinical measure cavitation can have two states "no cavities" or "cavities present". The minimum number of states per clinical measure is 2.| 
+Disease Sequence | The estimated number of disease classes and the clinical states belonging to each class. | 
+Predicted Disease Severity Class | Disease severity class assigned to each individual after estimating the disease sequence. | <br> 
+
 
 ## Analysis Workflow
 We recommend the following workflow as a general guide for analyzing data with tbSTATIS. Functions required are listed in parentheses:      
-1. Visualize clinical measures (plot_events())      
+1. Visualize clinical measures (plot_states())      
 2. Estimate model (fit_ebm())     
 3. Check likelihood ascent plot (plot_likes())     
 4. Reestimate model for m bootstrap resamples (bootstrap_seq())     
 5. Visualize uncertainty by making positional variance diagram (pvd())     
-6. Obtain predicted disease stage for each observation and plot distribution (get_stage() and plot_stage())     
+6. Obtain predicted disease class for each observation and plot distribution (pred_class() and plot_class())     
 
 ## Example Data Set   
-We provide a synthetic data set tbSTATISData in the tbSTATIS package. We will use this data set to walk through an example of analyzing data with tbSTATIS to classify TB disease severity.     
+We provide a synthetic data set TBData in the tbSTATIS package. We will use this data set to walk through an example of analyzing data with tbSTATIS to classify TB disease severity.     
 
 ### Description 
 In the table below, we provide a description of each variable included in the data set. 
@@ -68,27 +77,27 @@ Variable | Description |
 :-------:| :--------------: | 
 Index | Unique row identifier | 
 stage | True disease stage | 
-X1 | Indicator for event 1 in clinical measure 1 | 
-X2 | Indicator for event 2 in clinical measure 1 |
-X3 |  Indicator for event 1 in clinical measure 2 |
-X4 |  Indicator for event 2 in clinical measure 2 | 
-X5 |  Indicator for event 3 in clinical measure 2 | 
-X6 |  Indicator for event 1 in clinical measure 3 |
+X1 | Indicator for state 1 in clinical measure 1 | 
+X2 | Indicator for state 2 in clinical measure 1 |
+X3 |  Indicator for state 1 in clinical measure 2 |
+X4 |  Indicator for state 2 in clinical measure 2 | 
+X5 |  Indicator for state 3 in clinical measure 2 | 
+X6 |  Indicator for state 1 in clinical measure 3 |
 C1 |  Binary covariate |
 C2 |  Continuous covariate |  <br> 
 
 
-The data set contains 250 rows where each row represents data observed on a unique individual. There are 10 columns in the data set. For each individual, we record the value for 6 disease events corresponding to 3 clinical measures, and we include 2 covariates. The motivation for including covariates is we are often interested in associations between different variables with disease severity. Each covariate was simulated to be positively correlated with disease stage. 
+The data set contains 250 rows where each row represents data observed on a unique individual. There are 10 columns in the data set. For each individual, we record the value for 6 clinical states corresponding to 3 clinical measures, and we include 2 covariates. The motivation for including covariates is we are often interested in associations between different variables with disease severity. Each covariate was simulated to be positively correlated with disease stage. 
 
 ```{r TBData str}
 data(TBData)
 str(TBData)
 ```
 
-### True event sequence
-Here is the ground truth sequence of events that was used to generate TBData. There are 4 disease stages. Events X6, X1, and X3 occur simultaneously at stage 1: 
+### True disease sequence
+Here is the ground truth sequence of states that was used to generate TBData. There are 4 disease classes. States X6, X1, and X3 belong to class 1: 
 
-Event | Stage |
+State | Disease Class |
 :-------:| :--------------: | 
 X1 | 1 | 
 X2 | 2 |
@@ -99,18 +108,18 @@ X6 | 1 | <br>
 
 
 **Important Note**      
-  In theory we can include as many clinical measures and events as possible when fitting the EBM. The performance of the method decreases with smaller sample sizes, a larger number of events, and lower values of p for each event. We should consider these factors when choosing data to estimate the EBM. An additional challenge includes non-convergence when estimating the maximum likelihood sequence. This can potentially be mitigated by increasing the number of iterations during estimation but comes at the cost of increased computation time. 
+  In theory we can include as many clinical measures and states as possible when fitting TB-STATIS. The performance of the method decreases with smaller sample sizes, a larger number of states, and lower values of p for each state. We should consider these factors when choosing data to estimate the model. An additional challenge includes non-convergence when estimating the maximum likelihood sequence. This can potentially be mitigated by increasing the number of iterations during estimation but comes at the cost of increased computation time. 
 
 
 ### Data Summary 
 
 
-Below we provide the first 6 rows of our example data set. The first observation in this data set is at disease stage 2. Events X1, X2, X3, and X6 have occurred as indicated with the value 1, and events X4 and X6 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.9 so each individual’s data may not align perfectly with their true disease stage. For example, observation 3 and 4 are both at stage 1. Given the ground truth sequence, we would expect X1, X3, and X6 to all have the value 1. For observation 4 this is true, but for observation 3, X6 is equal to 0. 
+Below we provide the first 6 rows of our example data set. The first observation in this data set is in disease class 2. States X1, X2, X3, and X6 have occurred as indicated with the value 1, and states X4 and X6 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.9 so each individual’s data may not align perfectly with their true disease class. For example, observation 3 and 4 are both at class 1. Given the ground truth sequence, we would expect X1, X3, and X6 to all have the value 1. For observation 4 this is true, but for observation 3, X6 is equal to 0. 
 ```{r TBData first rows}
 head(TBData)
 ```
 
-Here is the distribution of disease stage. We can summarize true disease stage because we are using a simulated data set. We simulated disease stage originally using a uniform distribution, so we expect all stages to be approximately equally observed in the data. Notice here we have a disease stage 0 whereas in our true event sequence above we did not. This is because stage 0 is equivalent to no events having occurred. 
+Here is the distribution of disease class. We can summarize true disease class because we are using a simulated data set. We simulated disease class  using a uniform distribution, so we expect all classes to be approximately equally present in the data. Notice here we have a disease class 0 whereas in our true disease sequence above we did not. This is because class 0 is equivalent to an individual being in the earliest state for each clinical measure.
 ```{r stage dist}
 prop.table(table(TBData$stage))
 ```
@@ -122,12 +131,13 @@ fivenum(TBData$C2)
 ```
 ## Example analysis
 
-### Visualize clinical events
-Prior to fitting the model, it is good practice to first visualize the data we are using. We can plot our data using the plot_events function. This function first calculates the frequency of each event occurring and orders the events from most frequent to least frequent. The ordered events are the expected disease sequence for the data set as a greater event frequency should correspond to earlier disease stages. We then sort observations by the ordered events. We then plot each observation to visualize how well the data follow the expected disease sequence. The x-axis corresponds to observations after sorting and the y-axis corresponds to clinical events ordered by frequency. Blue indicates the event has occurred and white indicates the event has not occurred. If our data aligns well with the expected disease sequence, we expect the top left area of the plot to be mostly white and the bottom right to be consistently blue.  
+### Visualize clinical states
+Prior to fitting the model, it is good practice to first visualize the data we are using. We can plot our data using the plot_states function. This function first calculates the frequency of each state occurring and orders the states from most frequent to least frequent. The ordered states are the expected disease sequence for the data set as an accumulation of states within each clinical measure should correspond to more severe disease classes. We then sort observations by the ordered states. We then plot each observation to visualize how well the data follow the expected disease sequence. The x-axis corresponds to observations after sorting and the y-axis corresponds to clinical states ordered by frequency. Blue indicates the state has occurred and white indicates the state has not occurred. If our data aligns well with the expected disease sequence, we expect the top left area of the plot to be mostly white and the bottom right to be consistently blue.  
   
-We present the plot from  running the plot_events function with TBData. The y axis is ordered as X1, X6, X3, X2, X4, X5. This aligns with our ground truth sequence where X1, X6, and X3 occur at stage 1 followed by X2, X4, and X5 at stages 2, 3, and 4, respectively. We see our data align well with the ground truth sequence overall with few events occurring in the upper left hand portion of the plot. This is a result of us using a value of .9 for all clinical events when we simulated our data set. If p was lower, we would expect to see more variation. 
-```{r plot events}
-plot_events(TBData, id.var="Index", event.vars=c("X1", "X2", "X3", "X4", "X5", "X6"))
+We present the plot from  running the plot_states function with TBData. The y axis is ordered as X1, X6, X3, X2, X4, X5. This aligns with our ground truth sequence where X1, X6, and X3 are in class 1 followed by X2, X4, and X5 in class 2, 3, and 4, respectively. We see our data align well with the ground truth sequence overall with few states occurring in the upper left hand portion of the plot. This is a result of us using a value of .9 for all clinical states when we simulated our data set. If p was lower, we would expect to see more variation. 
+
+```{r plot states}
+plot_states(TBData, id.var="Index", state.vars=c("X1", "X2", "X3", "X4", "X5", "X6"))
 ```
 
 ### Estimate model
@@ -179,7 +189,7 @@ Our primary goal with using the EBM to understand TB disease severity is to obta
  
      
 Predicted disease can be analyzed as an outcome as researchers are frequently interested in factors associated with increased disease severity. Disease stage can also be use in secondary analysis as a predictor when modeling other outcomes of interest. 
-```{r disease stage}
+```{r disease class}
 #save estimated sequence from model
 est_seq=model1$ml_seq
 
@@ -190,7 +200,7 @@ stagedf <- get_stage(data=TBData[,c(3:8)], est_seq, c(.9,.9,.9,.9,.9,.9))
 head(stagedf)
 
 #plot predicted disease stage
-plot_stage(pred_stage=stagedf$pred_stage)
+plot_class(pred_class=stagedf$pred_stage)
 ```
 
 

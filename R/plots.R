@@ -1,56 +1,56 @@
-#' Plot clinical events
+#' Plot clinical states
 #'
 #' @param data A data frame.
 #' @param id.var Unique row identifier.
-#' @param event.vars Variable names for clinical events.
+#' @param state.vars Variable names for clinical states.
 #' @return A ggplot object.
 
 
-plot_events <- function(data=data.frame(), id.var=character(), event.vars=vector()){
+plot_states <- function(data=data.frame(), id.var=character(), state.vars=vector()){
 
-  events <- data[,c(id.var, event.vars)]
+  states <- data[,c(id.var, state.vars)]
 
-  events <- dplyr::arrange(events,events[,event.vars])
+  states <- dplyr::arrange(states,states[,state.vars])
 
-  props <- data.frame(events=c(event.vars), prop=rep(NA,length(event.vars)))
+  props <- data.frame(states=c(state.vars), prop=rep(NA,length(state.vars)))
 
-  for(i in event.vars){
-    props[props$events==i,2] <- prop.table(table(events[,i]))[2]
+  for(i in state.vars){
+    props[props$states==i,2] <- prop.table(table(states[,i]))[2]
 
   }
 
   props <- dplyr::arrange(props, -prop)
-  props$events <- factor(props$events)
+  props$states <- factor(props$states)
 
-  long <- reshape2::melt(events, id.var=id.var)
+  long <- reshape2::melt(states, id.var=id.var)
 
   long <- dplyr::arrange(long,value)
 
-  long[,id.var] <- factor( long[,id.var], levels=events[,id.var])
+  long[,id.var] <- factor( long[,id.var], levels=states[,id.var])
 
-  long$variable <- factor(long$variable, levels = props$events)
+  long$variable <- factor(long$variable, levels = props$states)
 
   long$value <- factor(long$value)
 
   event_plot <- ggplot2::ggplot(long, ggplot2::aes(long[,id.var],variable)) +
-    ggplot2::geom_tile(ggplot2::aes(fill = value), colour = "white") + ggplot2::scale_fill_manual(name="Levels", values = c("white", "#6099C6")) + ggplot2::xlab("Individual Participants") + ggplot2::ylab("Clinical Event") + ggplot2::theme_bw()+ ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank(), legend.position = "none", text=ggplot2::element_text(size=14))
+    ggplot2::geom_tile(ggplot2::aes(fill = value), colour = "white") + ggplot2::scale_fill_manual(name="Levels", values = c("white", "#6099C6")) + ggplot2::xlab("Individual Participants") + ggplot2::ylab("Clinical State") + ggplot2::theme_bw()+ ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank(), legend.position = "none", text=ggplot2::element_text(size=14))
 
   return(event_plot)
 
 }
 
 
-#' Plot disease stage
+#' Plot disease class
 #'
-#' @param pred_stage A vector.
+#' @param pred_class A vector.
 #' @return A ggplot object.
 
 
-plot_stage <- function(pred_stage=vector()){
+plot_class <- function(pred_class=vector()){
 
-  stagedf <- data.frame(stage=c(0:max(pred_stage)), prop = as.vector(prop.table(table(pred_stage))))
-  stage_plot <- ggplot2::ggplot(data=stagedf) + ggplot2::geom_bar(ggplot2::aes(x=stage, y=prop), stat="identity", fill="#3A68AB") + ggplot2::theme_bw() + ggplot2::xlab("Disease Stage")+ ggplot2::ylab("Proportion") + ggplot2::scale_x_continuous(breaks=c(0:max(pred_stage)))+ ggplot2::theme(text=ggplot2::element_text(size=14))
-  return(stage_plot)
+  classdf <- data.frame(class=c(0:max(pred_class)), prop = as.vector(prop.table(table(pred_class))))
+  class_plot <- ggplot2::ggplot(data=classdf) + ggplot2::geom_bar(ggplot2::aes(x=class, y=prop), stat="identity", fill="#3A68AB") + ggplot2::theme_bw() + ggplot2::xlab("Disease Severity Class")+ ggplot2::ylab("Proportion") + ggplot2::scale_x_continuous(breaks=c(0:max(pred_class)))+ ggplot2::theme(text=ggplot2::element_text(size=14))
+  return(class_plot)
 
 }
 
