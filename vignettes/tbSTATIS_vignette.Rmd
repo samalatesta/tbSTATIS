@@ -194,13 +194,13 @@ Predicted disease can be analyzed as an outcome as researchers are frequently in
 est_seq=model1$ml_seq
 
 #calculate predicted disease stage
-stagedf <- get_stage(data=TBData[,c(3:8)], est_seq, c(.9,.9,.9,.9,.9,.9))
+classdf <- pred_class(data=TBData[,c(3:8)], est_seq, c(.9,.9,.9,.9,.9,.9))
 
 #print first rows of data frame that includes predicted disease stage
-head(stagedf)
+head(classdf)
 
 #plot predicted disease stage
-plot_class(pred_class=stagedf$pred_stage)
+plot_class(pred_class=classdf$pred_class)
 ```
 
 

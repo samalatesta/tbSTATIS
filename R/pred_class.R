@@ -1,25 +1,25 @@
-#' Get disease stage
+#' Get disease class
 #' @param data A data frame.
 #' @param S Data frame
 #' @param p A vector
 #' @return A data frame.
 
-get_stage <- function(data=data.frame(), S=data.frame(), p=vector()){
+pred_class <- function(data=data.frame(), S=data.frame(), p=vector()){
 
 #data=dplyr::arrange(data,Index)
 likelihood=get_likelihood(data, S, p )
 
-stage_probs <- likelihood[[2]]
+class_probs <- likelihood[[2]]
 
 
-stage_probs=data.frame(stage_probs)
-colnames(stage_probs) = c(0:max(S$sub))
+class_probs=data.frame(class_probs)
+colnames(class_probs) = c(0:max(S$sub))
 
-pred_stage=as.numeric(colnames(stage_probs)[apply(stage_probs,1,which.max)])
+pred_class=as.numeric(colnames(class_probs)[apply(class_probs,1,which.max)])
 
-stagedf <- cbind(data,pred_stage)
+classdf <- cbind(data,pred_class)
 
-return(stagedf)
+return(classdf)
 }
 
 
