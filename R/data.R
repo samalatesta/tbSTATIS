@@ -6,7 +6,7 @@
 #' A data frame with 250 rows and 8 columns:
 #' \describe{
 #'   \item{Index}{unique row identifier}
-#'   \item{stage}{disease stage}
+#'   \item{class}{disease class}
 #'   \item{X1}{Clinical measure 1, state 1}
 #'   \item{X2}{Clinical measure 1, state 2}
 #'   \item{X3}{Clinical measure 2, state 1}

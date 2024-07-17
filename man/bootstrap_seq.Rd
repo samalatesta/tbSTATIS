@@ -20,7 +20,7 @@ bootstrap_seq(z, data, clinical_info, p_vec, nstart, initial_iter)
 \item{initial_iter}{Number of iterations}
 }
 \value{
-A list
+A data frame
 }
 \description{
 Find maximum likelihood estimate

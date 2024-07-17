@@ -33,7 +33,12 @@ plot_states <- function(data=data.frame(), id.var=character(), state.vars=vector
   long$value <- factor(long$value)
 
   event_plot <- ggplot2::ggplot(long, ggplot2::aes(long[,id.var],variable)) +
-    ggplot2::geom_tile(ggplot2::aes(fill = value), colour = "white") + ggplot2::scale_fill_manual(name="Levels", values = c("white", "#6099C6")) + ggplot2::xlab("Individual Participants") + ggplot2::ylab("Clinical State") + ggplot2::theme_bw()+ ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank(), legend.position = "none", text=ggplot2::element_text(size=14))
+                ggplot2::geom_tile(ggplot2::aes(fill = value), colour = "white") +
+                ggplot2::scale_fill_manual(name="Levels", values = c("white", "#6099C6")) +
+                ggplot2::xlab("Individual Participants") +
+                ggplot2::ylab("Clinical State") +
+                ggplot2::theme_bw()+
+                ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank(), legend.position = "none", text=ggplot2::element_text(size=14))
 
   return(event_plot)
 
@@ -49,7 +54,11 @@ plot_states <- function(data=data.frame(), id.var=character(), state.vars=vector
 plot_class <- function(pred_class=vector()){
 
   classdf <- data.frame(class=c(0:max(pred_class)), prop = as.vector(prop.table(table(pred_class))))
-  class_plot <- ggplot2::ggplot(data=classdf) + ggplot2::geom_bar(ggplot2::aes(x=class, y=prop), stat="identity", fill="#3A68AB") + ggplot2::theme_bw() + ggplot2::xlab("Disease Severity Class")+ ggplot2::ylab("Proportion") + ggplot2::scale_x_continuous(breaks=c(0:max(pred_class)))+ ggplot2::theme(text=ggplot2::element_text(size=14))
+  class_plot <- ggplot2::ggplot(data=classdf) +
+                ggplot2::geom_bar(ggplot2::aes(x=class, y=prop), stat="identity", fill="#3A68AB") +
+                ggplot2::theme_bw() + ggplot2::xlab("Disease Severity Class")+
+                ggplot2::ylab("Proportion") + ggplot2::scale_x_continuous(breaks=c(0:max(pred_class)))+
+                ggplot2::theme(text=ggplot2::element_text(size=14))
   return(class_plot)
 
 }
@@ -66,7 +75,13 @@ plot_class <- function(pred_class=vector()){
 
 plot_likes <- function(likes=data.frame()){
 
-  likes_plot <- ggplot2::ggplot(data=likes) + ggplot2::geom_line(ggplot2::aes(x=iter, y=like, color=factor(start))) + ggplot2::theme_bw() + ggplot2::ylab("Log-likelihood") + ggplot2::xlab("Iteration") + ggplot2::scale_color_discrete(name="Initialized Sequence") + ggplot2::xlim(0,max(likes$iter)) + ggplot2::theme(legend.position = "top", text = ggplot2::element_text(size=14))
+  likes_plot <- ggplot2::ggplot(data=likes) +
+                ggplot2::geom_line(ggplot2::aes(x=iter, y=like, color=factor(start))) +
+                ggplot2::theme_bw() + ggplot2::ylab("Log-likelihood") +
+                ggplot2::xlab("Iteration") +
+                ggplot2::scale_color_discrete(name="Initialized Sequence") +
+                ggplot2::xlim(0,max(likes$iter)) +
+                ggplot2::theme(legend.position = "top", text = ggplot2::element_text(size=14))
 
   return(likes_plot)
 

@@ -95,7 +95,7 @@ set.seed(123)
   }
   C2 <- round(C2, digits=3)
   dat3 <- cbind(dat2, C1, C2)
-
+  colnames(dat3)[2] <- "class"
   #set up data frame
   TBData <- dat3
 

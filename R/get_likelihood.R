@@ -1,13 +1,4 @@
 
-#S=new_order
-#measure_info <- data.frame(clinical_measure=c("measure1", "measure1", "measure2", "measure2", "measure2", "measure3"),event_number = c(1,2,1,2,3,1), event_name=c(c("X1", "X2", "X3", "X4", "X5", "X6")))
-
-#data <- TBebmData[,c(1,3:8)]
-#S=get_seq(measure_info)
-#poss=possible_seqs(6)
-#S <- get_group(S, poss)
-#p<- c(.8,.8,.8, .8, .8,.8)
-
 #get_likelihood(data,S,p)
 #' Calculate log-likelihood
 #'
@@ -18,12 +9,7 @@
 
 #S=current_seq
 get_likelihood <- function(data=data.frame(), S=data.frame(), p_vec=vector()){
-  #S=t
 
-  #S=t
-  #p<- c(.8,.8,.8, .8, .8)
-  #data=dat
-  #p=c(.9,.9,.9,.9)
   bio <- data.frame(data[,1:ncol(data)])
 
   # number of biomarkers

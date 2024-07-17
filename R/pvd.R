@@ -34,7 +34,7 @@ ml$event_name <- factor(ml$event_name)
 pvd$colname <- factor(pvd$colname, levels=ml$event_name)
 #pvd$value <- pvd$value/z
 pvd_plot=ggplot2::ggplot(pvd, ggplot2::aes(x = rowname, y = colname, fill = value)) +
-  ggplot2::geom_tile() + ggplot2::xlab("Disease Stage") + ggplot2::ylab("Clinical Measure") + ggplot2::scale_fill_gradient(name="",low = "white", high = "#3A68AB", breaks=c(0,.25,.5,.75,1)) + ggplot2::theme_bw() + ggplot2::theme(text=ggplot2::element_text(size=14, color="black"))
+  ggplot2::geom_tile() + ggplot2::xlab("Disease Severity Class") + ggplot2::ylab("Clinical State") + ggplot2::scale_fill_gradient(name="",low = "white", high = "#3A68AB", breaks=c(0,.25,.5,.75,1)) + ggplot2::theme_bw() + ggplot2::theme(text=ggplot2::element_text(size=14, color="black"))
 
 d <- data.frame(Y=ml$event_name, X=ml$sub)
 dat <- merge(pvd, d)

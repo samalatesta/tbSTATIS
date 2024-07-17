@@ -12,7 +12,8 @@
 
 #fit_ebm(data, p_vec, info, nstart=1, initial_iter=100)
 #Data set, measures info, number of start points,
-fit_ebm <- function(data,p_vec,clinical_info, nstart, initial_iter){
+fit_STATIS <- function(data,p_vec,clinical_info, nstart, initial_iter){
+  colnames(clinical_info) <- c("clinical_measure", "event_number", "event_name")
   #clinical_info=measure_info
   info <- clinical_info %>% dplyr::group_by(clinical_measure) %>% dplyr::summarise(events=dplyr::n())
   info <- data.frame(info)
@@ -31,7 +32,7 @@ fit_ebm <- function(data,p_vec,clinical_info, nstart, initial_iter){
     all_seqs <- vector(mode='list', length=nstart)
 
     start_seq <- get_seq(info)
-start_seq
+
     start_group <- get_group(start_seq, add)
 
     current_likelihood <- get_likelihood(data, start_group,p_vec)[[4]]
