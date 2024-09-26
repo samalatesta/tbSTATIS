@@ -33,7 +33,7 @@ plot_states <- function(data=data.frame(), id.var=character(), state.vars=vector
   long$value <- factor(long$value)
 
   event_plot <- ggplot2::ggplot(long, ggplot2::aes(long[,id.var],variable)) +
-                ggplot2::geom_tile(ggplot2::aes(fill = value), colour = "white") +
+                ggplot2::geom_tile(ggplot2::aes(fill = value)) +
                 ggplot2::scale_fill_manual(name="Levels", values = c("white", "#6099C6")) +
                 ggplot2::xlab("Individual Participants") +
                 ggplot2::ylab("Clinical State") +
