@@ -14,6 +14,15 @@ include functions to estimate the model, quantify model uncertainty, and
 visualize results. We provide a detailed vignette that walks through an
 example analysis using `tbSTATIS`.
 
+For a more formal discussion of the theory behind and usage of this
+method, see the following paper:
+
+Malatesta S, Jacobson KR, Horsburgh CR, Farhat MR, Gile KJ, Kolaczyk ED,
+White LF. Data-driven classification of tuberculosis disease severity.
+
+Code to replicate all simulation results from this paper is available
+[here](https://github.com/samalatesta/tbSTATISpaper).
+
 ## Installation
 
 You can install the development version of `tbSTATIS` from
