@@ -18,7 +18,7 @@ For a more formal discussion of the theory behind and usage of this
 method, see the following paper:
 
 Malatesta S, Jacobson KR, Horsburgh CR, Farhat MR, Gile KJ, Kolaczyk ED,
-White LF. Data-driven classification of tuberculosis disease severity.
+White LF. An Integrated Data-Driven Model for Clinical Phenotyping of Tuberculosis Disease Severity.
 
 Code to replicate all simulation results from this paper is available
 [here](https://github.com/samalatesta/tbSTATISpaper).
