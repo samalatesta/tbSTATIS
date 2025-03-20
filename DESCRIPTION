@@ -1,11 +1,12 @@
 Package: tbSTATIS
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tuberculosis SeveriTy Assessment Tool for Informed Stratification
 Version: 0.1.0
 Authors@R: person("Samantha", "Malatesta", email = "samalate@bu.edu", role = c("aut", "cre", "cph"))
 Maintainer: Samantha Malatesta <samalate@bu.edu>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: This package implements TB-STATIS which is a statistical model for 
+generating clinical phenotypes of tuberculosis disease severity
+through integration of multiple data sources at time of diagnosis. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
