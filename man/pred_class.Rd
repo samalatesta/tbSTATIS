@@ -2,20 +2,21 @@
 % Please edit documentation in R/pred_class.R
 \name{pred_class}
 \alias{pred_class}
-\title{Get disease class}
+\title{Get predicted disease class}
 \usage{
 pred_class(data = data.frame(), S = data.frame(), p = vector())
 }
 \arguments{
-\item{data}{A data frame.}
+\item{data}{A data frame of observed data.}
 
-\item{S}{Data frame}
+\item{S}{A data frame for the estimated disease sequence.}
 
-\item{p}{A vector}
+\item{p}{A vector of clinical state accuracies.}
 }
 \value{
 A data frame.
 }
 \description{
-Get disease class
+Get predicted disease class for each individual in sample given their observed data and an estimated
+disease sequence from fitting TB-STATIS.
 }
