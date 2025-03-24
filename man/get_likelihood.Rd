@@ -9,7 +9,7 @@ get_likelihood(data = data.frame(), S = data.frame(), p_vec = vector())
 \arguments{
 \item{data}{A data frame.}
 
-\item{S}{Data frame}
+\item{S}{A data frame.}
 
 \item{p_vec}{A vector}
 }
@@ -17,5 +17,5 @@ get_likelihood(data = data.frame(), S = data.frame(), p_vec = vector())
 A list.
 }
 \description{
-Calculate log-likelihood
+Calculate likelhood given observed data, sequence S, vector of clinical measure accuracies p_vec.
 }
