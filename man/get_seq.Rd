@@ -2,17 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{get_seq}
 \alias{get_seq}
-\title{Propose sequence as start point for maximum likelihood estimation.}
+\title{Sequence initialization}
 \usage{
 get_seq(info = data.frame())
 }
 \arguments{
-\item{info}{A data frame.}
+\item{info}{A data frame containing the clinical measures and corresponding clinical
+states to generate a sequence from.}
 }
 \value{
 A data frame.
 }
 \description{
-Propose sequence as start point for maximum likelihood estimation.
+Generate initial sequence as start point for maximum likelihood search.
 }
 \keyword{internal}

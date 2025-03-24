@@ -2,17 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{possible_seqs}
 \alias{possible_seqs}
-\title{Generate data frame of all possible simultaneous sequences.}
+\title{All possible sequences}
 \usage{
 possible_seqs(N = numeric())
 }
 \arguments{
-\item{N}{Number of events.}
+\item{N}{Number of clinical states.}
 }
 \value{
 A data frame.
 }
 \description{
-Generate data frame of all possible simultaneous sequences.
+Generate data frame of all possible simultaneous sequences for N clinical states.
 }
 \keyword{internal}
