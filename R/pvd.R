@@ -1,8 +1,13 @@
 
-#' Plot positional variance diagram
+#' Positional variance diagram
 #'
-#' @param boot_seqs A vector.
-#' @param ml description
+#' @description
+#' Plot maximum likelihood sequence with sequences fit using bootstrap resampling to visualize
+#' uncertainty about maximum likelihood sequence.
+#'
+#' @param boot_seqs A data frame of estimated sequences obtained from bootstrap resampling and
+#' estimating TB-STATIS on each resample.
+#' @param ml Maximum likelihood sequence from fitting TB-STATIS to original data.
 #' @return A ggplot object.
 
 

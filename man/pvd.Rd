@@ -2,18 +2,20 @@
 % Please edit documentation in R/pvd.R
 \name{pvd}
 \alias{pvd}
-\title{Plot positional variance diagram}
+\title{Positional variance diagram}
 \usage{
 pvd(boot_seqs = data.frame(), ml = data.frame())
 }
 \arguments{
-\item{boot_seqs}{A vector.}
+\item{boot_seqs}{A data frame of estimated sequences obtained from bootstrap resampling and
+estimating TB-STATIS on each resample.}
 
-\item{ml}{description}
+\item{ml}{Maximum likelihood sequence from fitting TB-STATIS to original data.}
 }
 \value{
 A ggplot object.
 }
 \description{
-Plot positional variance diagram
+Plot maximum likelihood sequence with sequences fit using bootstrap resampling to visualize
+uncertainty about maximum likelihood sequence.
 }
