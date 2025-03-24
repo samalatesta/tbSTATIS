@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{plot_states}
 \alias{plot_states}
-\title{Plot clinical states}
+\title{Clinical states visualization}
 \usage{
 plot_states(data = data.frame(), id.var = character(), state.vars = vector())
 }
@@ -17,5 +17,6 @@ plot_states(data = data.frame(), id.var = character(), state.vars = vector())
 A ggplot object.
 }
 \description{
-Plot clinical states
+Generate plot of individual-level data arranged by clinical state frequency where clinical states are ordered from most frequent to least
+frequent.
 }

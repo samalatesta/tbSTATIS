@@ -2,16 +2,17 @@
 % Please edit documentation in R/plots.R
 \name{plot_class}
 \alias{plot_class}
-\title{Plot disease class}
+\title{Disease class distribution}
 \usage{
 plot_class(pred_class = vector())
 }
 \arguments{
-\item{pred_class}{A vector.}
+\item{pred_class}{A vector of predicted disease classes.}
 }
 \value{
 A ggplot object.
 }
 \description{
-Plot disease class
+Generate a bar plot of the disease class distribution using the vector containing the predicted
+disease class for each individual after fitting TB-STATIS.
 }

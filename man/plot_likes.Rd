@@ -2,16 +2,17 @@
 % Please edit documentation in R/plots.R
 \name{plot_likes}
 \alias{plot_likes}
-\title{Plot likelihood ascent}
+\title{Likelihood ascent plot}
 \usage{
 plot_likes(likes = data.frame())
 }
 \arguments{
-\item{likes}{A data frame with three columns (start, iter, like).}
+\item{likes}{A data frame with three columns containing the log-likelihood for each iteration and each initialization.}
 }
 \value{
 A ggplot object.
 }
 \description{
-The function `plot_likes` function generates a plot of the likelihood ascent from fitting the EBM. The x-axis is the iteration number, the y-axis is the log-likelihood, and each line represents the log-likelihood at each iteration for a single initialized sequence.
+Generate a line plot of the likelihood ascent from fitting TB-STATIS. The x-axis is the iteration number, the y-axis is the log-likelihood,
+and each line represents the log-likelihood at each iteration for a single initialized sequence.
 }
