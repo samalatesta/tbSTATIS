@@ -2,26 +2,26 @@
 % Please edit documentation in R/bootstrap_seq.R
 \name{bootstrap_seq}
 \alias{bootstrap_seq}
-\title{Find maximum likelihood estimate}
+\title{Quantify sequence uncertainty with bootstrap resampling}
 \usage{
 bootstrap_seq(z, data, clinical_info, p_vec, nstart, initial_iter)
 }
 \arguments{
-\item{z}{number of bootstrap samples}
+\item{z}{Number of bootstrap resamples to perform.}
 
-\item{data}{A data frame.}
+\item{data}{A data frame of observed data.}
 
-\item{clinical_info}{A data frame}
+\item{clinical_info}{A data frame with clinical measures and clinical states.}
 
-\item{p_vec}{Unique row identifier.}
+\item{p_vec}{A vector of clinical measure accuracies to fit TB-STATIS.}
 
-\item{nstart}{Number of initialization points}
+\item{nstart}{Number of initialized sequences for each run of TB-STATIS.}
 
-\item{initial_iter}{Number of iterations}
+\item{initial_iter}{Number of iterations for TB-STATIS.}
 }
 \value{
-A data frame
+A data frame of sequences estimated for bootstrap resamples.
 }
 \description{
-Find maximum likelihood estimate
+Quantify sequence uncertainty with bootstrap resampling
 }
