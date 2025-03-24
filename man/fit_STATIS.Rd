@@ -2,24 +2,27 @@
 % Please edit documentation in R/fit_STATIS.R
 \name{fit_STATIS}
 \alias{fit_STATIS}
-\title{Find maximum likelihood estimate}
+\title{Fit TB-STATIS}
 \usage{
 fit_STATIS(data, p_vec, clinical_info, nstart, initial_iter)
 }
 \arguments{
-\item{data}{A data frame.}
+\item{data}{A data frame of observed data.}
 
-\item{p_vec}{Unique row identifier.}
+\item{p_vec}{A vector of clinical measure accuracies.}
 
-\item{clinical_info}{A data frame}
+\item{clinical_info}{A data frame of clinical measures and states.}
 
-\item{nstart}{Number of initialization points}
+\item{nstart}{Number of sequence initializations for maximum likelihood search.}
 
-\item{initial_iter}{Number of iterations}
+\item{initial_iter}{Number of iterations for maximum likelihood search.}
 }
 \value{
-A list
+A list of results.
 }
 \description{
-Find maximum likelihood estimate
+Estimate maximum likelihood sequence for TB-STATIS. User must input the observed data,
+set of clinical states and measures to include in the model, and a vector of probabilities indicating the accuracy
+for each clinical measure.'fit_STATIS' returns the maximum likelihood sequence, and all log-likelihoods calculated during
+estimation.
 }
