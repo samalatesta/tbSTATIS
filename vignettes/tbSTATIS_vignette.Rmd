@@ -38,6 +38,7 @@ set.seed(0)
 We then load the package by running:
 ```{r setup}
 library(tbSTATIS)
+library(dplyr)
 ```
 
 We often collect information from multiple data sources such as symptoms, sputum culture, sputum smear microscopy, and chest radiography during the process of diagnosing persons with TB. While this information is used to inform TB diagnosis, it is also strongly correlated with TB disease severity. Common approaches to categorizing TB severity include using smear microscopy or cavitation on chest x-ray alone offering only a binary view of the TB disease spectrum. 
