@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   tbSTATIS_vignette: tbSTATIS_vignette.html
-last_built: 2025-03-25T15:48Z
+last_built: 2025-03-25T15:57Z
 urls:
   reference: https://samalatesta.github.io/tbSTATIS/reference
   article: https://samalatesta.github.io/tbSTATIS/articles
