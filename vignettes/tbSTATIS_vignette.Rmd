@@ -1,5 +1,5 @@
 ---
-title: "Tutorial for R Package tbSTATIS"
+title: "Tutorial for tbSTATIS"
 output:
   html_document:
     toc: true
@@ -75,16 +75,16 @@ Variable | Description |
 Index | Unique row identifier | 
 class | True disease class | 
 X1 | Indicator for state 1 in clinical measure 1 | 
-X2 | Indicator for state 2 in clinical measure 1 |
-X3 |  Indicator for state 1 in clinical measure 2 |
-X4 |  Indicator for state 2 in clinical measure 2 | 
-X5 |  Indicator for state 3 in clinical measure 2 | 
-X6 |  Indicator for state 1 in clinical measure 3 |
+X2 | Indicator for state 1 in clinical measure 2 |
+X3 |  Indicator for state 2 in clinical measure 2 |
+X4 |  Indicator for state 1 in clinical measure 3 | 
+X5 |  Indicator for state 2 in clinical measure 3 | 
+X6 |  Indicator for state 1 in clinical measure 4 |
 C1 |  Binary covariate |
 C2 |  Continuous covariate |  <br> 
 
 
-The data set contains 250 rows where each row represents data observed on a unique individual. There are 10 columns in the data set. For each individual, we record the value for 6 clinical states corresponding to 3 clinical measures, and we include 2 covariates. The motivation for including covariates is we are often interested in associations between different variables with disease severity. Each covariate was simulated to be positively correlated with disease class. 
+The data set contains 250 rows where each row represents data observed on a unique individual. There are 10 columns in the data set. For each individual, we record the value for 6 clinical states corresponding to 4 clinical measures, and we include 2 covariates. The motivation for including covariates is we are often interested in associations between different variables with disease severity. Each covariate was simulated to be positively correlated with disease class. 
 
 ```{r TBData str}
 data(TBData)
@@ -92,14 +92,14 @@ str(TBData)
 ```
 
 ### True disease sequence
-Here is the ground truth sequence of states that was used to generate TBData. There are 4 disease classes. States X6, X1, and X3 belong to class 1: 
+Here is the ground truth sequence of states that was used to generate TBData. There are 4 disease classes. States X2, X6 belong to class 1: 
 
 Clinical State | Disease Class |
 :-------:| :--------------: | 
-X1 | 1 | 
-X2 | 2 |
-X3 | 1|
-X4 | 3 | 
+X1 | 3 | 
+X2 | 1 |
+X3 | 3 |
+X4 | 2 | 
 X5 | 4 | 
 X6 | 1 | <br> 
 
@@ -107,7 +107,7 @@ X6 | 1 | <br>
 ### Data Summary 
 
 
-Below we provide the first 6 rows of our example data set. The first observation in this data set is in disease class 2. States X1, X2, X3, and X6 have occurred as indicated with the value 1, and states X4 and X6 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.9 so each individual’s data may not align perfectly with their true disease class. For example, observation 3 and 4 are both at class 1. Given the ground truth sequence, we would expect X1, X3, and X6 to all have the value 1. For observation 4 this is true, but for observation 3, X6 is equal to 0. 
+Below we provide the first 6 rows of our example data set. The third observation in this data set is in disease class 2. States X2, X5, and X6 have occurred as indicated with the value 1, and states X1, X3, and X5 have not occurred which is indicated by the value 0. We generated this data set setting p to 0.9 so each individual’s data may not align perfectly with their true disease class. For example, observation 3 and 5 are both in class 2. Given the ground truth sequence, we would expect X2, X4, and X6 to all have the value 1. For observation 5 this is true, but for observation 3, X4 is equal to 0 and instead X5 is equal to 1. 
 ```{r TBData first rows}
 head(TBData)
 ```
@@ -127,21 +127,21 @@ fivenum(TBData$C2)
 ### Visualize clinical states
 Prior to fitting the model, it is good practice to first visualize the data we are using. We can plot our data using the plot_states function. This function first calculates the frequency of each state occurring and orders the states from most frequent to least frequent. The ordered states are the expected disease sequence for the data set as an accumulation of states within each clinical measure should correspond to more severe disease classes. We then sort observations by the ordered states. We then plot each observation to visualize how well the data follow the expected disease sequence. The x-axis corresponds to observations after sorting and the y-axis corresponds to clinical states ordered by frequency. Blue indicates the state has occurred and white indicates the state has not occurred. If our data aligns well with the expected disease sequence, we expect the top left area of the plot to be mostly white and the bottom right to be consistently blue.  
   
-We present the plot from  running the plot_states function with TBData. The y axis is ordered as X1, X6, X3, X2, X4, X5. This aligns with our ground truth sequence where X1, X6, and X3 are in class 1 followed by X2, X4, and X5 in class 2, 3, and 4, respectively. We see our data align well with the ground truth sequence overall with few states occurring in the upper left hand portion of the plot. This is a result of us using a value of .9 for all clinical states when we simulated our data set. If p was lower, we would expect to see more variation. 
+We present the plot from  running the plot_states function with TBData. The y axis is ordered as X6, X2, X4, X1, X3, X5. This aligns with our ground truth sequence where X2, and X6 are in class 1 followed by X4 inc class 2, then X1 and X3 in class 3 and finally X5 in class 4. We see our data align well with the ground truth sequence overall with few states occurring in the upper left hand portion of the plot. This is a result of us using a value of .9 for all clinical states when we simulated our data set. If p was lower, we would expect to see more variation. 
 
-```{r plot states, eval=F}
+```{r plot states}
 plot_states(TBData, id.var="Index", state.vars=c("X1", "X2", "X3", "X4", "X5", "X6"))
 ```
 
 ### Estimate model
-We fit TB-STATIS using the fit_STATIS function. Prior to running the model, the data set should be formatted such that each clinical state has a  recorded value of 1 to indicate the clinical state has occurred or 0 otherwise. If there are any observations with missing data they are excluded prior to model fitting. We require the user to also input a data frame that provides the set of clinical state for each clinical measure and clinical state that corresponds to a column name in the data set used to fit the model.We provide the information data frame for TBData that will use to fit the model as an example. We must also specify a value of p for each state.
+We fit TB-STATIS using the fit_STATIS function. Prior to running the model, the data set should be formatted such that each clinical state has a  recorded value of 1 to indicate the clinical state has occurred or 0 otherwise. If there are any observations with missing data they are excluded prior to model fitting. We require the user to also input a data frame that provides the set of clinical states for each clinical measure and the clinical state that corresponds to a column name in the data set used to fit the model.We provide the information data frame for TBData that we will use to fit the model as an example. We must also specify a value of p for each state.
 ```{r measures}
-measure_info <- data.frame(clinical_measure=c("measure1", "measure1", "measure2", "measure2", "measure2", "measure3"),clinical_state = c(1,2,1,2,3,1), state_name=c(c("X1", "X2", "X3", "X4", "X5", "X6")))
+measure_info <- data.frame(clinical_measure=c("measure1", "measure2", "measure2", "measure3", "measure3", "measure4"),clinical_state = c(1,1,2,1,2,1), state_name=c(c("X1", "X2", "X3", "X4", "X5", "X6")))
 
 print(measure_info)
 ```
-The fit_STATIS function returns a list. One object in the list called ml_seq is a data frame with 4 columns. The class column in this data frame is the maximum likelihood sequence. We present the maximum likelihood sequence for TBData. We ran the model with only 3 start points and 250 iterations but in practice the minimum number of start points should be 10 with at least 2000 iterations. From this output, the maximum likelihood sequence is ({X6, X1, X3}, {X2}, {X4},{X5}) which is the same as our ground truth sequence. 
-```{r fit TB-STATIS, eval=F}
+The fit_STATIS function returns a list. One object in the list called ml_seq is a data frame with 4 columns. The 'sub' column in this data frame is the maximum likelihood sequence. We present the maximum likelihood sequence for TBData. We ran the model with only 3 start points and 250 iterations but in practice the minimum number of start points should be 10 with at least 2000 iterations. From this output, the maximum likelihood sequence is ({X6, X2}, {X4}, {X1, X3},{X5}) which is the same as our ground truth sequence. 
+```{r fit TB-STATIS, eval=T}
 model1 = fit_STATIS(data=TBData[,c(3:8)], p_vec=c(.9,.9,.9,.9,.9,.9), clinical_info=measure_info, nstart=3,initial_iter= 250)
 
 #print maximum likelihood estimate
@@ -150,9 +150,9 @@ print(model1$ml_seq)
 
    
 ### Likelihood ascent
-After estimating the model, we assess model convergence by plotting the likelihood ascent for each start point using the plot_likes function. The log-likelihoods for all iterations can be accessed from the saved model object. For example, we saved our model as model1 above and we can call model1$loglikes which is a dataframe that contains all log-likelihoods across all iterations and start points. We present the likelihood ascent plot for estimating the model with TBData. We see all start points converged within the first 50 iterations. When running TB-STATIS with real data, it is likely the model will not converge until at least 2000 iterations. When fitting the model we recommend checking convergence by plotting the likelihood ascent and if convergence is very slow or does not occur then to increase the total number of iterations and/or start points and rerun the model. 
+After estimating the model, we assess model convergence by plotting the likelihood ascent for each start point using the plot_likes function. The log-likelihoods for all iterations can be accessed from the saved model object. For example, we saved our model as model1 above and we can call model1$loglikes which is a dataframe that contains all log-likelihoods across all iterations and start points. We present the likelihood ascent plot for estimating the model with TBData. All initializations do not converge to the same log-likelihood because we only used 250 iterations to shorten computational time for this tutorial. When running TB-STATIS with real data, it is likely the model will not converge until at least 2000 iterations. When fitting the model we recommend checking convergence by plotting the likelihood ascent and if convergence is very slow or does not occur then to increase the total number of iterations and/or start points and rerun the model. 
 
-```{r likelihood ascent, eval=F}
+```{r likelihood ascent, eval=T}
 #first 6 rows of loglikes data frame
 head(model1$loglikes)
 
@@ -161,10 +161,10 @@ plot_likes(model1$loglikes)
 ```
 
 ### Bootstrap resamples
-After fitting the model, we recommend constructing a positional variance diagram to visualize uncertainty in the maximum likelihood sequence. We provide the function bootstrap_seq to refit the model on a chosen number of resamples with replacement from the observed data. We recommend using at least 100 resamples. This function requires the same inputs as fit_STATIS with the additional argument z which is the total number of bootstrap resamples. The function returns a data frame where each row represents the sequence estimated for 1 resample from our observed data. We ran bootstrap_seq with TBData and our estimated sequence above. We present the first 6 rows of output. If our model fits the data well, we expect a majority of the bootstrap sequences to be the same as our maximum likelihood sequence. Like with fit_STATIS, in practice a mininum of 2000 iterations and 10 start points should be used. 
+After fitting the model, we recommend constructing a positional variance diagram to visualize uncertainty in the maximum likelihood sequence. We provide the function bootstrap_seq to refit the model on a chosen number of resamples with replacement from the observed data. We recommend using at least 100 resamples. This function requires the same inputs as fit_STATIS with the additional argument z which is the total number of bootstrap resamples. The function returns a data frame where each row represents the sequence estimated for 1 resample from our observed data. We ran bootstrap_seq with TBData and our estimated sequence above. We present the first 6 rows of output. If our model fits the data well, we expect a majority of the bootstrap sequences to be the same as our maximum likelihood sequence. Like with fit_STATIS, in practice a mininum of 2000 iterations and 10 starting sequences should be used. 
 ```{r bootstrap sequences, eval=F}
 
-boot_seqs = bootstrap_seq(z=25,data=TBData[,c(3:8)], p_vec=c(.9,.9,.9,.9,.9,.9), clinical_info=measure_info, nstart=1,initial_iter= 250)
+boot_seqs = bootstrap_seq(z=10,data=TBData[,c(3:8)], p_vec=c(.9,.9,.9,.9,.9,.9), clinical_info=measure_info, nstart=3,initial_iter= 250)
 
 head(boot_seqs)
 ```
@@ -172,7 +172,7 @@ head(boot_seqs)
 ### Positional variance diagram
 After obtaining bootstrap sequences, we plot them in a positional variance diagram (PVD) to visualize the location and degree of uncertainty for our maximum likelihood sequence using the function pvd. The function requires a data frame of bootstrap sequences and the maximum likelihood sequence as input.  The function returns a heatmap where the x-axis is disease class and the y axis is each clinical state in order of the maximum likelihood sequence. Each square in the plot represents the proportion of bootstrap sequences where each state occurs at each disease class. Darker colors indicate a higher proportion/degree of certainty. The disease class estimated for each state in the maximum likelihood sequence is outlined in black. We expect the highest proportion of bootstrap samples for each state to occur for the class where the state occurs in the maximum likelihood sequence.    
    
-We provide the PVD for the bootstrap samples for TBData below. A majority of our bootstrap sequences were equivalent to the maximum likelihood sequence. We observe uncertainty for states X3 to X5 where a small proportion of sequences estimated these states to occur one class greater than the maximum likelihood sequence. It is important to note that the x axis for the pvd ranges from 1 to 6 to account for the fact that some bootstrap sequences may have a different number of disease classes than our maximum likelihood estimate. The maximum number of classes is always equal to the total number of clinical states; for our example data set this is 6. 
+We provide the PVD for the bootstrap samples for TBData below. A majority of our bootstrap sequences were equivalent to the maximum likelihood sequence. It is important to note that the x axis for the pvd ranges from 1 to 6 to account for the fact that some bootstrap sequences may have a different number of disease classes than our maximum likelihood estimate. The maximum number of classes is always equal to the total number of clinical states; for our example data set this is 6. 
 ```{r positional variance diagram, eval=F}
 pvd(boot_seqs = boot_seqs, ml=model1$ml_seq)
 ```
@@ -182,7 +182,7 @@ Our primary goal with using TB-STATIS is to understand TB disease severity is to
  
      
 Predicted disease class can be analyzed as an outcome as researchers are frequently interested in factors associated with increased disease severity. Disease class can also be use in secondary analysis as a predictor when modeling other outcomes of interest. 
-```{r disease class, eval=F}
+```{r disease class, eval=T}
 #save estimated sequence from model
 est_seq=model1$ml_seq
 
@@ -193,7 +193,7 @@ classdf <- pred_class(data=TBData[,c(3:8)], est_seq, c(.9,.9,.9,.9,.9,.9))
 head(classdf)
 
 #plot predicted disease class
-plot_class(pred_class=classdf$pred_class)
+plot_class(pred_class=classdf$pred_stage)
 ```
 
 
