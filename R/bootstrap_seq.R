@@ -14,7 +14,7 @@ bootstrap_seq <- function(z, data,clinical_info, p_vec, nstart, initial_iter ){
   for(i in 1:z){
     boot = data[sample(nrow(data),nrow(data), T),]
     model1 <-  fit_STATIS(boot, p_vec, clinical_info, nstart, initial_iter)
-    boot_ml = rbind(boot_ml, model1[[4]][,5])
+    boot_ml = rbind(boot_ml, model1[[4]][,6])
 
   }
   return(boot_ml)
