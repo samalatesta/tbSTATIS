@@ -6,6 +6,7 @@
 ![Package Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 <!-- badges: start --> <!-- badges: end -->
+For documentation and a tutorial, checkout the [website!](https://samalatesta.github.io/tbSTATIS/index.html)
 
 The `tbSTATIS` package implements the tuberculosis SeveriTy Assessment
 Tool for Informed Stratification (TB-STATIS) to classify TB disease
