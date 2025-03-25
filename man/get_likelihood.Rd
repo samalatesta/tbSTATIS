@@ -17,5 +17,5 @@ get_likelihood(data = data.frame(), S = data.frame(), p_vec = vector())
 A list.
 }
 \description{
-Calculate likelhood given observed data, sequence S, vector of clinical measure accuracies p_vec.
+Calculate likelihood given observed data, sequence S, vector of clinical measure accuracies p_vec.
 }
